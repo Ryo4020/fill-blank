@@ -27,6 +27,7 @@ export default defineComponent({
     font-size: 28px;
     color: black;
     font-weight: bold;
+    filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.6));
     cursor: pointer;
 }
 </style>
