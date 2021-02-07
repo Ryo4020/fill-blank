@@ -1,9 +1,12 @@
 <template>
-  <div class="top-link">{{ label }}</div>
+  <div class="top-link">
+    <div class="top-link-label">{{ label }}</div>
+    <img :src="require(`@/assets/icons/${iconName}.svg`)" />
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 
 export default defineComponent({
   name: "AccountLink",
@@ -17,18 +20,31 @@ export default defineComponent({
       },
     },
   },
+  setup(props) {
+    const iconName = computed(() => {
+      return props.label === "ログイン" ? "log-in" : "log-out";
+    });
+
+    return {
+      iconName,
+    };
+  },
 });
 </script>
 
 <style lang="scss" scopped>
 .top-link {
-  font-size: 18px;
-  color: black;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  &-label {
+    font-size: 18px;
+    color: black;
+    cursor: pointer;
+  }
 
   &:hover {
-    color: gray;
-    border-bottom: 1px solid gray;
+    border: 1px solid gray;
   }
 }
 </style>
