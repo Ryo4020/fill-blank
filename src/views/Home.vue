@@ -12,7 +12,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import TableComponent from "@/components/organisms/Table/index.vue";
+import TableComponent, { PropHomeDataType } from "@/components/organisms/Table/index.vue";
 
 import { HOME_TABLE_LIST, HOME_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
 
@@ -25,7 +25,7 @@ export default defineComponent({
     const homeTableList = HOME_TABLE_LIST; // 表の列データ
     const homeOperatorList = HOME_TABLE_OPERATOR_LIST; // 表のボタンのデータ
 
-    const groupList = [
+    const groupList: PropHomeDataType[] = [
       // 試験的な問題グループデータ
       {
         id: 1,

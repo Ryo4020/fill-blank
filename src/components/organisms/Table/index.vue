@@ -13,6 +13,8 @@ import TableContent, { PropHomeDataType, PropEditDataType } from "@/components/o
 
 import { ItableContent, ItableOperator } from "@/mixins/tableLists";
 
+export { PropHomeDataType, PropEditDataType };
+
 export default defineComponent({
   name: "TableComponent",
   components: {
