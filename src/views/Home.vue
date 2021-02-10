@@ -4,28 +4,35 @@
       :headerList="homeTableList"
       :operatorList="homeOperatorList"
       :data="groupList"
-      @click-row="clickRow"
+      @click-row="opeGroup"
     />
+    <div class="button-wrapper">
+      <CommonButton label="新規追加" @click-event="addGroup" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
-import TableComponent, { PropHomeDataType } from "@/components/organisms/Table/index.vue";
+import CommonButton from "@/components/atoms/CommonButton.vue";
+import TableComponent, {
+  PropHomeDataType,
+} from "@/components/organisms/Table/index.vue";
 
 import { HOME_TABLE_LIST, HOME_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
 
 export default defineComponent({
   name: "Home",
   components: {
+    CommonButton,
     TableComponent,
   },
   setup() {
     const homeTableList = HOME_TABLE_LIST; // 表の列データ
     const homeOperatorList = HOME_TABLE_OPERATOR_LIST; // 表のボタンのデータ
 
-    const groupList: PropHomeDataType[] = [
+    const groupList = ref<PropHomeDataType[]>([
       // 試験的な問題グループデータ
       {
         id: 1,
@@ -39,9 +46,14 @@ export default defineComponent({
         value: [],
         total: 3,
       },
-    ];
+    ]);
 
-    function clickRow(dataId: number, operatorKey: string): void { // 押されたボタンの種類で分岐
+    function addGroup(): void { // グループの新規追加
+      console.log("addGroup");
+    }
+
+    function opeGroup(dataId: number, operatorKey: string): void {
+      // 押されたボタンの種類で分岐
       console.log(dataId, operatorKey);
     }
 
@@ -49,7 +61,8 @@ export default defineComponent({
       homeTableList,
       homeOperatorList,
       groupList,
-      clickRow,
+      addGroup,
+      opeGroup,
     };
   },
 });
@@ -59,6 +72,13 @@ export default defineComponent({
 .home {
   width: 100%;
   height: calc(100% - 72px); //ヘッダーの分引く
-  padding: 28px;
+  display: grid;
+  grid-template-rows: calc(100% - 48px) 32px;
+  row-gap: 16px;
+  padding: 24px;
+
+  .button-wrapper {
+    text-align: center;
+  }
 }
 </style>
