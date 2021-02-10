@@ -57,6 +57,7 @@ export default defineComponent({
       required: false,
     },
   },
+  emits: ["click-row"],
   setup(props, context: SetupContext) {
 
     function clickRow(operatorKey: string): void { // ボタン押すと対象のidとイベントの種類を渡す

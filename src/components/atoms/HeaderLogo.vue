@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Router, useRouter } from 'vue-router'
+import { Router, useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'HeaderLogo',
