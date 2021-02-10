@@ -1,6 +1,8 @@
 <template>
   <div class="edit">
+    <!-- 左上に固定 -->
     <ArrowToHome />
+    
     <SearchForm @search-event="search" />
     <div class="button-wrapper">
       <CommonButton label="新規追加" @click-event="addQuestion" />
@@ -113,7 +115,7 @@ export default defineComponent({
   }
 }
 
-@media screen and (max-width: 510px) {
+@media screen and (max-width: 510px) { // 幅が狭い場合は「一覧に戻る」の下に下がる
   .edit {
     grid-template:
     "..... search add  " 36px
