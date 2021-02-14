@@ -18,11 +18,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    id: {
-      // 配列を変更する場合のid
-      type: Number,
-      required: false,
-    },
     label: {
       // テキストフィールドに表示する文字列
       type: String,

@@ -2,6 +2,7 @@
   <div class="app">
     <GlobalHeader :linkLabel="linkLabel" />
     <router-view />
+    <Modal v-show="$store.state.modal.isOpening" />
   </div>
 </template>
 
@@ -9,11 +10,13 @@
 import { defineComponent, ref } from "vue";
 
 import GlobalHeader from "@/components/layouts/GlobalHeader.vue";
+import Modal from "@/components/organisms/Modal/index.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     GlobalHeader,
+    Modal,
   },
   setup() {
     const linkLabel = ref<string>("ログイン"); // アカウント状態変更リンクの表示文字
