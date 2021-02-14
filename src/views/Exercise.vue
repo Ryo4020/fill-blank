@@ -24,7 +24,7 @@ export default defineComponent({
     CommonButton,
   },
   setup() {
-    function next(): void {
+    function next(): void { // 次の問題を写す
       console.log("次の問題へ");
     }
 

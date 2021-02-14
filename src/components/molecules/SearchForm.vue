@@ -23,7 +23,7 @@ export default defineComponent({
   setup(props, context: SetupContext) {
     const searchWord = ref<string>(""); // 検索ワード
 
-    function search(): void {
+    function search(): void { // 検索開始
       context.emit("search-event", searchWord.value);
     }
 

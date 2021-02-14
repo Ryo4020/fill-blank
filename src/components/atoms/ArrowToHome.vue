@@ -14,7 +14,7 @@ export default defineComponent({
   setup() {
     const router: Router = useRouter();
 
-    function transHome(): void {
+    function transHome(): void { // ホーム画面へ遷移
       router.push('/');
     }
 

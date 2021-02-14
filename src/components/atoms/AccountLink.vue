@@ -21,7 +21,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const iconName = computed(() => {
+    const iconName = computed(() => { // ログイン状況でiconを変更
       return props.label === "ログイン" ? "log-in" : "log-out";
     });
 
