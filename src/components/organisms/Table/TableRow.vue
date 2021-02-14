@@ -43,6 +43,7 @@ export default defineComponent({
   name: "TableRow",
   props: {
     dataItem: {
+      // 表に入れるデータ
       type: Object as PropType<PropHomeDataType | PropEditDataType>,
       required: true,
     },
