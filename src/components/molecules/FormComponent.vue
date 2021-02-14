@@ -56,6 +56,7 @@ export default defineComponent({
   padding: 8px;
   &-label {
     font-size: 20px;
+    margin-bottom: 4px;
   }
 }
 </style>

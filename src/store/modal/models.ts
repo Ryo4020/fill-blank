@@ -4,6 +4,6 @@ export interface ImodalState {
 }
 
 export class ModalState implements ImodalState {
-    isOpening = true; // モーダルが表示されたらtrue
-    path = "LogInForm"; // 表示中のモーダルの名前
+    isOpening = false; // モーダルが表示されたらtrue
+    path = null; // 表示中のモーダルの名前
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="top-link">
+  <div class="top-link" @click="openModal">
     <div class="top-link-label">{{ label }}</div>
     <img :src="require(`@/assets/icons/${iconName}.svg`)" />
   </div>
@@ -7,6 +7,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: "AccountLink",
@@ -21,10 +22,18 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const store = useStore();
+
     const iconName = computed(() =>  props.label === "ログイン" ? "log-in" : "log-out"); // ログイン状況でiconを変更
+
+    function openModal(): void { // モーダルを開く処理
+      const modalName: string = props.label === "ログイン" ? "LogInForm" : "ConfirmLogOut";
+      store.dispatch("modal/setModal", modalName);
+    }
 
     return {
       iconName,
+      openModal
     };
   },
 });

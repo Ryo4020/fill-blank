@@ -4,7 +4,7 @@
       <div class="header-label">確認</div>
     </template>
     <template v-slot:content>
-      <div class="content-message">本当にログアウトしますか？</div>
+      <div class="content-message">削除されたデータは復元できません。本当に削除しますか？</div>
     </template>
     <template v-slot:footerLeft>
       <div class="footer-wrapper">
@@ -13,7 +13,7 @@
     </template>
     <template v-slot:footerRight>
       <div class="footer-wrapper">
-        <CommonButton label="はい" @click="logOut" />
+        <CommonButton label="はい" @click="confirm" />
       </div>
     </template>
   </ModalFrame>
@@ -27,7 +27,7 @@ import ModalFrame from "@/components/organisms/Modal/ModalFrame.vue";
 import CommonButton from "@/components/atoms/CommonButton.vue";
 
 export default defineComponent({
-  name: "ConfirmLogOut",
+  name: "ConfirmDelete",
   components: {
     ModalFrame,
     CommonButton,
@@ -45,14 +45,14 @@ export default defineComponent({
       closeModal();
     }
 
-    function logOut(): void { // ログアウト処理
-      console.log("ログアウト");
+    function confirm(): void { // 削除確定
+      console.log("削除");
       closeModal();
     }
 
     return {
       cancel,
-      logOut,
+      confirm,
     };
   },
 });
@@ -71,6 +71,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   background: silver;
+  padding: 0px 12px;
 }
 
 .footer-wrapper {

@@ -3,7 +3,7 @@
     <div class="modal-header">
       <slot name="header"></slot>
       <div class="close">
-        <img src=@/assets/icons/cross-closer.svg @click="closeModal" />
+        <img src="@/assets/icons/cross-closer.svg" @click="closeModal" />
       </div>
     </div>
     <div class="modal-content">

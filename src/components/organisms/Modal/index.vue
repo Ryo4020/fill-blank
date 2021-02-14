@@ -10,12 +10,20 @@ import { useStore } from 'vuex';
 
 import LogInForm from "@/components/organisms/Modal/LogInForm.vue";
 import ConfirmLogOut from "@/components/organisms/Modal/ConfirmLogOut.vue";
+import ConfirmDelete from "@/components/organisms/Modal/ConfirmDelete.vue";
+import AddGroupForm from "@/components/organisms/Modal/AddGroupForm.vue";
+import AddQuestionForm from "@/components/organisms/Modal/AddQuestionForm.vue";
+import EditQuestionForm from "@/components/organisms/Modal/EditQuestionForm.vue";
 
 export default defineComponent({
   name: "Modal",
   components: {
     LogInForm,
     ConfirmLogOut,
+    ConfirmDelete,
+    AddGroupForm,
+    AddQuestionForm,
+    EditQuestionForm,
   },
   setup() {
     const store = useStore();
