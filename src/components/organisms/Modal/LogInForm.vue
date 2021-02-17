@@ -45,12 +45,18 @@ export default defineComponent({
       // フォームのデータを格納
       {
         id: 1,
+        label: "Name(任意)",
+        value: "デフォルト",
+        formType: "TextField",
+      },
+      {
+        id: 2,
         label: "E-Mail",
         value: "",
         formType: "TextField",
       },
       {
-        id: 2,
+        id: 3,
         label: "Password",
         value: "",
         formType: "PasswordField",
@@ -84,9 +90,10 @@ export default defineComponent({
     function authenticate(): void {
       // サインインまたはサインアップ
       const methodName: string = isSignIn.value ? "signIn" : "signUp";
-      const authData: {id: string; password: string} = { // 認証情報
-        id: logInDataList.value[0].value,
-        password: logInDataList.value[1].value,
+      const authData: {name: string; id: string; password: string} = { // 認証情報
+        name: logInDataList.value[0].value,
+        id: logInDataList.value[1].value,
+        password: logInDataList.value[2].value,
       };
 
       store.dispatch(`auth/${ methodName }`, authData);

@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <div class="home-message">{{ userName }} さんのグループページです</div>
     <TableComponent
       :headerList="homeTableList"
       :operatorList="homeOperatorList"
@@ -13,7 +14,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
+import { useStore } from "vuex";
+import { Router, useRouter } from "vue-router";
 
 import CommonButton from "@/components/atoms/CommonButton.vue";
 import TableComponent, {
@@ -48,19 +51,57 @@ export default defineComponent({
       },
     ]);
 
-    function addGroup(): void { // グループの新規追加
-      console.log("addGroup");
+    const store = useStore();
+    const router: Router = useRouter();
+
+    const isAuthed = computed(() => store.state.auth.isAuthed); // ログインしてるかどうか
+    const userName = computed(() => store.state.auth.userName); // 試験的なユーザー名
+
+    function addGroup(): void {
+      // グループの新規追加
+      if (isAuthed.value) {
+        // 追加するにはログイン必要
+        store.dispatch("modal/setModal", "AddGroupForm");
+      } else {
+        alert("グループを追加するにはログインが必要です");
+        store.dispatch("modal/setModal", "LogInForm");
+      }
     }
 
     function opeGroup(dataId: number, operatorKey: string): void {
       // 押されたボタンの種類で分岐
-      console.log(dataId, operatorKey);
+      switch (operatorKey) {
+        case "exercise": // グループの問題を演習
+          console.log(dataId);
+          break;
+        case "edit": // グループの問題を編集
+          if (isAuthed.value) {
+            // 編集するにはログイン必要
+            router.push("/edit");
+          } else {
+            alert("問題を編集するにはログインが必要です");
+            store.dispatch("modal/setModal", "LogInForm");
+          }
+          break;
+        case "delete": // グループを削除
+          if (isAuthed.value) {
+            // 削除するにはログイン必要
+            store.dispatch("modal/setModal", "ConfirmDelete");
+          } else {
+            alert("問題を編集するにはログインが必要です");
+            store.dispatch("modal/setModal", "LogInForm");
+          }
+          break;
+      }
     }
 
     return {
       homeTableList,
       homeOperatorList,
       groupList,
+
+      userName,
+
       addGroup,
       opeGroup,
     };
@@ -73,9 +114,18 @@ export default defineComponent({
   width: 100%;
   height: calc(100% - 72px); //ヘッダーの分引く
   display: grid;
-  grid-template-rows: calc(100% - 48px) 32px;
+  grid-template-rows: 22px calc(100% - 86px) 32px;
   row-gap: 16px;
   padding: 24px;
+
+  &-message {
+    width: 80%;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin: 0 auto; // 左右中央揃え用
+  }
 
   .button-wrapper {
     text-align: center;

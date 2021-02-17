@@ -22,10 +22,11 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const isAuth = computed(() => store.state.auth.isAuth);
-    const linkLabel = computed(() => isAuth.value ? "ログアウト" : "ログイン"); // アカウント状態変更リンクの表示文字
+    const isAuthed = computed(() => store.state.auth.isAuthed);
+    const linkLabel = computed(() => isAuthed.value ? "ログアウト" : "ログイン"); // アカウント状態変更リンクの表示文字
 
     onBeforeMount(() => {
+      store.dispatch("auth/onAuthChanged");
       store.dispatch("modal/closeModal");
     })
 

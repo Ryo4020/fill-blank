@@ -6,6 +6,9 @@ export const mutations: MutationTree<IauthState> = {
   init(state: IauthState) {
     Object.assign(state, new AuthState());
   },
+  setUserName(state: IauthState, payload: string) { // ユーザー名変更
+    state.userName = payload;
+  },
   setUserData(state: IauthState, payload: object | undefined) { // ユーザー情報変更
     state.userData = payload;
   },

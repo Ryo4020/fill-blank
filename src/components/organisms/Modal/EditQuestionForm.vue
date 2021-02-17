@@ -5,7 +5,7 @@
     </template>
     <template v-slot:content>
       <div class="content-description">説明</div>
-      <TextArea v-model="questionText" label="ここに問題文を入力" />
+      <TextArea v-model="questionText" :row="13" label="ここに問題文を入力" />
     </template>
     <template v-slot:footerLeft>
       <div class="footer-wrapper">
@@ -72,6 +72,7 @@ export default defineComponent({
 }
 
 .content-description {
+  height: 64px;
   font-size: 20px;
   display: flex;
   justify-content: center;

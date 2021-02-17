@@ -2,7 +2,7 @@
   <div class="edit">
     <!-- 左上に固定 -->
     <ArrowToHome />
-    
+
     <SearchForm @search-event="search" />
     <div class="button-wrapper">
       <CommonButton label="新規追加" @click-event="addQuestion" />
@@ -18,6 +18,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import { useStore } from "vuex";
 
 import ArrowToHome from "@/components/atoms/ArrowToHome.vue";
 import CommonButton from "@/components/atoms/CommonButton.vue";
@@ -59,14 +60,24 @@ export default defineComponent({
       console.log(searchWord);
     }
 
+    const store = useStore();
+
     function addQuestion(): void {
       // 問題の新規追加
-      console.log("add");
+      store.dispatch("modal/setModal", "AddQuestionForm");
     }
 
     function opeQuestion(dataId: number, operatorKey: string): void {
       // 押されたボタンの種類で分岐
-      console.log(dataId, operatorKey);
+      console.log(dataId);
+      switch (operatorKey) {
+        case "edit": // グループの問題を編集
+          store.dispatch("modal/setModal", "EditQuestionForm");
+          break;
+        case "delete": // グループを削除
+          store.dispatch("modal/setModal", "ConfirmDelete");
+          break;
+      }
     }
 
     return {
@@ -115,12 +126,13 @@ export default defineComponent({
   }
 }
 
-@media screen and (max-width: 510px) { // 幅が狭い場合は「一覧に戻る」の下に下がる
+@media screen and (max-width: 510px) {
+  // 幅が狭い場合は「一覧に戻る」の下に下がる
   .edit {
     grid-template:
-    "..... search add  " 36px
-    "table table  table" calc(100% - 36px)
-    / 1fr minmax(160px, 480px) 80px;
+      "..... search add  " 36px
+      "table table  table" calc(100% - 36px)
+      / 1fr minmax(160px, 480px) 80px;
     padding: 52px 4px 24px 4px !important;
   }
 }

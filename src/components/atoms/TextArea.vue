@@ -1,6 +1,6 @@
 <template>
   <textarea
-    rows="14"
+    :rows="row"
     :placeholder="label"
     :value="modelValue"
     @input="changeValue"
@@ -16,6 +16,11 @@ export default defineComponent({
     modelValue: {
       // 入力される文字列
       type: String,
+      required: true,
+    },
+    row: {
+      // テキストエリア
+      type: Number,
       required: true,
     },
     label: {

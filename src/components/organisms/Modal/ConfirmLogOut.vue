@@ -46,8 +46,7 @@ export default defineComponent({
     }
 
     function logOut(): void { // ログアウト処理
-      console.log("ログアウト");
-      closeModal();
+      store.dispatch("auth/signOut");
     }
 
     return {

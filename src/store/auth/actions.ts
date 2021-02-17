@@ -8,21 +8,25 @@ import firebase from "firebase/app";
 import "firebase/auth";
 
 export const actions: ActionTree<IauthState, RootState> = {
-  signUp(context, payload: { id: string; password: string }) { // サインアップの処理
+  signUp(context, payload: { name: string; id: string; password: string }) { // サインアップの処理
     firebase.auth().createUserWithEmailAndPassword(payload.id, payload.password)
       .then(() => { // 成功したらモーダル閉じてホームへ
         context.dispatch("modal/closeModal", null, {root: true});
         router.push('/');
+
+        context.commit("setUserName", payload.name);
       })
       .catch(error => {
         alert(error.message);
       });
   },
-  signIn(context, payload: { id: string; password: string }) { // ログインの処理
+  signIn(context, payload: { name: string; id: string; password: string }) { // ログインの処理
     firebase.auth().signInWithEmailAndPassword(payload.id, payload.password)
       .then(() => { // 成功したらモーダル閉じてホームへ
         context.dispatch("modal/closeModal", null, {root: true});
         router.push('/');
+
+        context.commit("setUserName", payload.name);
       })
       .catch(error => {
         alert(error.message);
@@ -33,6 +37,8 @@ export const actions: ActionTree<IauthState, RootState> = {
       .then(() => {
         context.dispatch("modal/closeModal", null, {root: true});
         router.push('/'); // 成功したらホームへ
+
+        context.commit("setUserName", "guest");
       }).catch(error => {
         alert(error.message);
       })
