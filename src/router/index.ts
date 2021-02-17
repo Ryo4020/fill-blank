@@ -12,12 +12,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/exercise',
     name: 'Exercise',
-    component: Exercise,
+    component: Exercise
   },
   {
     path: '/edit',
     name: 'Edit',
-    component: Edit,
+    component: Edit
   },
 ];
 

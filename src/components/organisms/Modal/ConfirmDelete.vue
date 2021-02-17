@@ -34,7 +34,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-
+    
     function closeModal(): void {
       // モーダル閉じる処理
       store.dispatch("modal/closeModal");

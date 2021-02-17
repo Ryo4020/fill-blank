@@ -35,13 +35,6 @@ export default defineComponent({
     CommonButton,
   },
   setup() {
-    const store = useStore();
-
-    function closeModal(): void {
-      // モーダル閉じる処理
-      store.dispatch("modal/closeModal");
-    }
-
     const addGroupData = ref<IaddGroupData>(
       // フォームのデータを格納
       {
@@ -52,12 +45,20 @@ export default defineComponent({
       }
     );
 
+    const store = useStore();
+    
+    function closeModal(): void {
+      // モーダル閉じる処理
+      store.dispatch("modal/closeModal");
+    }
+
     function changeFormValue(value: string): void {
       // フォームの入力内容をデータに反映
       addGroupData.value.value = value;
     }
 
-    function addGroup(): void { // グループを追加
+    function addGroup(): void {
+      // グループを追加
       console.log("追加");
       closeModal();
     }

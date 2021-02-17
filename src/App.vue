@@ -7,7 +7,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, onBeforeMount } from "vue";
+import { useStore } from "vuex";
 
 import GlobalHeader from "@/components/layouts/GlobalHeader.vue";
 import Modal from "@/components/organisms/Modal/index.vue";
@@ -19,7 +20,14 @@ export default defineComponent({
     Modal,
   },
   setup() {
-    const linkLabel = ref<string>("ログイン"); // アカウント状態変更リンクの表示文字
+    const store = useStore();
+
+    const isAuth = computed(() => store.state.auth.isAuth);
+    const linkLabel = computed(() => isAuth.value ? "ログアウト" : "ログイン"); // アカウント状態変更リンクの表示文字
+
+    onBeforeMount(() => {
+      store.dispatch("modal/closeModal");
+    })
 
     return {
       linkLabel

@@ -25,6 +25,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
+import { useStore } from "vuex";
 
 import ModalFrame from "@/components/organisms/Modal/ModalFrame.vue";
 import FormComponent, {
@@ -64,7 +65,7 @@ export default defineComponent({
     const isSignIn = ref<boolean>(true); // ログインのモーダルならtrue、新規登録ならfalse
     const label = computed(() => {
       // 表示するラベルを場所と種類で場合分け
-      return function(key: number): string {
+      return function (key: number): string {
         if (key === 0) {
           return isSignIn.value ? "ログイン" : "新規登録";
         } else {
@@ -78,8 +79,17 @@ export default defineComponent({
       isSignIn.value = !isSignIn.value;
     }
 
-    function authenticate(): void { // サインインまたはサインアップ
-      console.log(isSignIn.value);
+    const store = useStore();
+    
+    function authenticate(): void {
+      // サインインまたはサインアップ
+      const methodName = computed(() => (isSignIn.value ? "signIn" : "signUp"));
+      const authData: {id: string; password: string} = { // 認証情報
+        id: logInDataList.value[0].value,
+        password: logInDataList.value[1].value,
+      };
+
+      store.dispatch(`auth/${ methodName.value }`, authData);
     }
 
     return {
@@ -89,7 +99,7 @@ export default defineComponent({
       label,
       shiftMode,
 
-      authenticate
+      authenticate,
     };
   },
 });

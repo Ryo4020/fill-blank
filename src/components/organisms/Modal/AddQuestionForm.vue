@@ -33,11 +33,11 @@ export default defineComponent({
     TextArea,
     CommonButton,
   },
-  setup() {
-    const store = useStore();
-
+  setup() { 
     const questionText = ref<string>(""); // 入力される問題文
 
+    const store = useStore();
+    
     function closeModal(): void {
       // モーダル閉じる処理
       store.dispatch("modal/closeModal");
