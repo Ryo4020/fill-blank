@@ -18,7 +18,7 @@
       </div>
     </template>
     <template v-slot:footerRight>
-      <CommonButton :label="label(0)" />
+      <CommonButton :label="label(0)" @click-event="authenticate" />
     </template>
   </ModalFrame>
 </template>
@@ -28,7 +28,7 @@ import { computed, defineComponent, ref } from "vue";
 
 import ModalFrame from "@/components/organisms/Modal/ModalFrame.vue";
 import FormComponent, {
-  PropFormType as IlogInDataList,
+  PropFormType as IlogInData,
 } from "@/components/molecules/FormComponent.vue";
 import CommonButton from "@/components/atoms/CommonButton.vue";
 
@@ -40,7 +40,7 @@ export default defineComponent({
     CommonButton,
   },
   setup() {
-    const logInDataList = ref<IlogInDataList[]>([
+    const logInDataList = ref<IlogInData[]>([
       // フォームのデータを格納
       {
         id: 1,
@@ -78,12 +78,18 @@ export default defineComponent({
       isSignIn.value = !isSignIn.value;
     }
 
+    function authenticate(): void { // サインインまたはサインアップ
+      console.log(isSignIn.value);
+    }
+
     return {
       logInDataList,
       changeFormValue,
 
       label,
       shiftMode,
+
+      authenticate
     };
   },
 });

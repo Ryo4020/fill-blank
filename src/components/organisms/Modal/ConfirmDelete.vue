@@ -8,12 +8,12 @@
     </template>
     <template v-slot:footerLeft>
       <div class="footer-wrapper">
-        <CommonButton label="いいえ" @click="cancel" />
+        <CommonButton label="いいえ" @click-event="cancel" />
       </div>
     </template>
     <template v-slot:footerRight>
       <div class="footer-wrapper">
-        <CommonButton label="はい" @click="confirm" />
+        <CommonButton label="はい" @click-event="confirm" />
       </div>
     </template>
   </ModalFrame>

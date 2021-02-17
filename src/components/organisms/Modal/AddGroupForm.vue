@@ -11,7 +11,7 @@
     </template>
     <template v-slot:footerRight>
       <div class="button-wrapper">
-        <CommonButton label="追加" @click="addGroup" />
+        <CommonButton label="追加" @click-event="addGroup" />
       </div>
     </template>
   </ModalFrame>

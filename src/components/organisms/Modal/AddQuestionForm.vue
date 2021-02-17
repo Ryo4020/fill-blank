@@ -12,7 +12,7 @@
     </template>
     <template v-slot:footerRight>
       <div class="button-wrapper">
-        <CommonButton label="追加" @click="addQuestion" />
+        <CommonButton label="追加" @click-event="addQuestion" />
       </div>
     </template>
   </ModalFrame>

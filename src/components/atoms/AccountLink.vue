@@ -1,13 +1,12 @@
 <template>
   <div class="top-link" @click="openModal">
     <div class="top-link-label">{{ label }}</div>
-    <img :src="require(`@/assets/icons/${iconName}.svg`)" />
+    <img :src="require(`@/assets/icons/${ icon }.svg`)" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
-import { useStore } from 'vuex';
+import { defineComponent, SetupContext } from "vue";
 
 export default defineComponent({
   name: "AccountLink",
@@ -15,24 +14,24 @@ export default defineComponent({
     label: {
       type: String,
       required: true,
+    },
+    icon: {
+      type: String,
+      required: true,
       validator: (value: string) => {
         // プロパティの値は、必ずいずれかの文字列でなければならない
-        return ["ログイン", "ログアウト"].indexOf(value) !== -1;
+        return ["log-in", "log-out"].indexOf(value) !== -1;
       },
     },
   },
-  setup(props) {
-    const store = useStore();
+  emits: ["open-modal"],
+  setup(props, context: SetupContext) {
 
-    const iconName = computed(() =>  props.label === "ログイン" ? "log-in" : "log-out"); // ログイン状況でiconを変更
-
-    function openModal(): void { // モーダルを開く処理
-      const modalName: string = props.label === "ログイン" ? "LogInForm" : "ConfirmLogOut";
-      store.dispatch("modal/setModal", modalName);
+    function openModal(): void { // モーダルを開く処理 
+      context.emit("open-modal");
     }
 
     return {
-      iconName,
       openModal
     };
   },

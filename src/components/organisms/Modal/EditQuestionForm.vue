@@ -9,12 +9,12 @@
     </template>
     <template v-slot:footerLeft>
       <div class="footer-wrapper">
-        <CommonButton label="戻る" @click="back" />
+        <CommonButton label="戻る" @click-event="back" />
       </div>
     </template>
     <template v-slot:footerRight>
       <div class="footer-wrapper">
-        <CommonButton label="更新" @click="updateQuestion" />
+        <CommonButton label="更新" @click-event="updateQuestion" />
       </div>
     </template>
   </ModalFrame>
