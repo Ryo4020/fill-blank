@@ -47,6 +47,7 @@ export default defineComponent({
   },
   emits: ["click-row"],
   setup(props, context: SetupContext) {
+    
     function clickRow(dataId: number, operatorKey: string): void {
       context.emit("click-row", dataId, operatorKey);
     }

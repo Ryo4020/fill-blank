@@ -83,13 +83,13 @@ export default defineComponent({
     
     function authenticate(): void {
       // サインインまたはサインアップ
-      const methodName = computed(() => (isSignIn.value ? "signIn" : "signUp"));
+      const methodName: string = isSignIn.value ? "signIn" : "signUp";
       const authData: {id: string; password: string} = { // 認証情報
         id: logInDataList.value[0].value,
         password: logInDataList.value[1].value,
       };
 
-      store.dispatch(`auth/${ methodName.value }`, authData);
+      store.dispatch(`auth/${ methodName }`, authData);
     }
 
     return {
