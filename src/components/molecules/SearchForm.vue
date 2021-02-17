@@ -40,7 +40,7 @@ export default defineComponent({
   width: 100%;
   height: 36px;
   display: grid;
-  grid-template-columns: 1fr 48px;
+  grid-template-columns: 1fr 64px;
   column-gap: 8px;
 
   .button-wrapper {

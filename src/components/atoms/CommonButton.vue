@@ -29,6 +29,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 button {
+  min-width: 64px;
   height: 32px;
   font-size: 16px;
   font-weight: bold;
