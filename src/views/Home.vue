@@ -17,7 +17,7 @@ import { defineComponent, ref } from "vue";
 
 import CommonButton from "@/components/atoms/CommonButton.vue";
 import TableComponent, {
-  PropHomeDataType as IgroupList,
+  PropHomeDataType as IgroupType,
 } from "@/components/organisms/Table/index.vue";
 
 import { HOME_TABLE_LIST, HOME_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
@@ -32,7 +32,7 @@ export default defineComponent({
     const homeTableList = HOME_TABLE_LIST; // 表の列データ
     const homeOperatorList = HOME_TABLE_OPERATOR_LIST; // 表のボタンのデータ
 
-    const groupList = ref<IgroupList[]>([
+    const groupList = ref<IgroupType[]>([
       // 試験的な問題グループデータ
       {
         id: 1,

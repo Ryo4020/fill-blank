@@ -23,7 +23,7 @@ import ArrowToHome from "@/components/atoms/ArrowToHome.vue";
 import CommonButton from "@/components/atoms/CommonButton.vue";
 import SearchForm from "@/components/molecules/SearchForm.vue";
 import TableComponent, {
-  PropEditDataType,
+  PropEditDataType as IquestionType,
 } from "@/components/organisms/Table/index.vue";
 
 import { EDIT_TABLE_LIST, EDIT_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
@@ -40,7 +40,7 @@ export default defineComponent({
     const editTableList = EDIT_TABLE_LIST; // 表の列データ
     const editOperatorList = EDIT_TABLE_OPERATOR_LIST; // 表のボタンのデータ
 
-    const questionList = ref<PropEditDataType[]>([
+    const questionList = ref<IquestionType[]>([
       // 試験的な問題データ
       {
         id: 1,
