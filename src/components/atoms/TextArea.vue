@@ -27,7 +27,7 @@ export default defineComponent({
   emits: ["update:model-value"],
   setup(props, context: SetupContext) {
 
-    function changeValue(e: { target: { value: string; }; }): void {
+    function changeValue(e: { target: { value: string } }): void {
       // 値の変更を反映
       context.emit("update:model-value", e.target.value);
     }
