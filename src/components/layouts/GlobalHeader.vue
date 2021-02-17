@@ -31,10 +31,10 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const store = useStore();
-
     const iconName = computed(() =>  props.linkLabel === "ログイン" ? "log-in" : "log-out"); // ログイン状況でiconを変更
 
+    const store = useStore();
+    
     function openModal(): void {
       const modalName: string = props.linkLabel === "ログイン" ? "LogInForm" : "ConfirmLogOut"; // 開くモーダルの名前
       store.dispatch("modal/setModal", modalName);

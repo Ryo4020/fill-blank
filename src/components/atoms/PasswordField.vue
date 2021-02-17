@@ -2,7 +2,7 @@
   <input
     type="password"
     :placeholder="label"
-    v-model="innerValue"
+    :value="modelValue"
     @input="changeValue"
   />
 </template>
@@ -26,15 +26,13 @@ export default defineComponent({
   },
   emits: ["update:model-value"],
   setup(props, context: SetupContext) {
-    const innerValue = ref<string>(props.modelValue); // v-modelで変更される
-
-    function changeValue(): void {
+    
+    function changeValue(e: { target: { value: string; }; }): void {
       // 値の変更を反映
-      context.emit("update:model-value", innerValue.value);
+      context.emit("update:model-value", e.target.value);
     }
 
     return {
-      innerValue,
       changeValue,
     };
   },
