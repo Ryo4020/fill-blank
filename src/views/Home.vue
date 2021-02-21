@@ -72,26 +72,39 @@ export default defineComponent({
       // 押されたボタンの種類で分岐
       switch (operatorKey) {
         case "exercise": // グループの問題を演習
-          console.log(dataId);
+          startExercise(dataId);
           break;
         case "edit": // グループの問題を編集
-          if (isAuthed.value) {
-            // 編集するにはログイン必要
-            router.push("/edit");
-          } else {
-            alert("問題を編集するにはログインが必要です");
-            store.dispatch("modal/setModal", "LogInForm");
-          }
+          startEdit();
           break;
         case "delete": // グループを削除
-          if (isAuthed.value) {
-            // 削除するにはログイン必要
-            store.dispatch("modal/setModal", "ConfirmDelete");
-          } else {
-            alert("問題を編集するにはログインが必要です");
-            store.dispatch("modal/setModal", "LogInForm");
-          }
+          openConfirmDelete();
           break;
+      }
+    }
+
+    function startExercise(dataId: number): void {
+      // 演習開始処理
+      console.log(dataId);
+    }
+
+    function startEdit(): void {
+      if (isAuthed.value) {
+        // 編集するにはログイン必要
+        router.push("/edit");
+      } else {
+        alert("問題を編集するにはログインが必要です");
+        store.dispatch("modal/setModal", "LogInForm");
+      }
+    }
+
+    function openConfirmDelete(): void {
+      if (isAuthed.value) {
+        // 削除するにはログイン必要
+        store.dispatch("modal/setModal", "ConfirmDelete");
+      } else {
+        alert("問題を編集するにはログインが必要です");
+        store.dispatch("modal/setModal", "LogInForm");
       }
     }
 
