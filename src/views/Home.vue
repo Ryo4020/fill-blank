@@ -68,24 +68,10 @@ export default defineComponent({
       }
     }
 
-    function opeGroup(dataId: number, operatorKey: string): void {
-      // 押されたボタンの種類で分岐
-      switch (operatorKey) {
-        case "exercise": // グループの問題を演習
-          startExercise(dataId);
-          break;
-        case "edit": // グループの問題を編集
-          startEdit();
-          break;
-        case "delete": // グループを削除
-          openConfirmDelete();
-          break;
-      }
-    }
-
     function startExercise(dataId: number): void {
       // 演習開始処理
       console.log(dataId);
+      router.push("/exercise");
     }
 
     function startEdit(): void {
@@ -105,6 +91,21 @@ export default defineComponent({
       } else {
         alert("問題を編集するにはログインが必要です");
         store.dispatch("modal/setModal", "LogInForm");
+      }
+    }
+
+    function opeGroup(dataId: number, operatorKey: string): void {
+      // 押されたボタンの種類で分岐
+      switch (operatorKey) {
+        case "exercise": // グループの問題を演習
+          startExercise(dataId);
+          break;
+        case "edit": // グループの問題を編集
+          startEdit();
+          break;
+        case "delete": // グループを削除
+          openConfirmDelete();
+          break;
       }
     }
 
