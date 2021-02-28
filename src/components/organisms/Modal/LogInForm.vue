@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 import ModalFrame from "@/components/organisms/Modal/ModalFrame.vue";
@@ -41,33 +41,6 @@ export default defineComponent({
     CommonButton,
   },
   setup() {
-    const logInDataList = ref<IlogInData[]>([
-      // フォームのデータを格納
-      {
-        id: 1,
-        label: "Name(任意)",
-        value: "デフォルト",
-        formType: "TextField",
-      },
-      {
-        id: 2,
-        label: "E-Mail",
-        value: "",
-        formType: "TextField",
-      },
-      {
-        id: 3,
-        label: "Password",
-        value: "",
-        formType: "PasswordField",
-      },
-    ]);
-
-    function changeFormValue(value: string, id: number): void {
-      // フォームの入力内容をデータに反映
-      logInDataList.value[id - 1].value = value;
-    }
-
     const isSignIn = ref<boolean>(true); // ログインのモーダルならtrue、新規登録ならfalse
     const label = computed(() => {
       // 表示するラベルを場所と種類で場合分け
@@ -85,26 +58,61 @@ export default defineComponent({
       isSignIn.value = !isSignIn.value;
     }
 
+    const logInDataList = ref<IlogInData[]>([
+      // フォームのデータを格納
+      {
+        id: 1,
+        label: "E-Mail",
+        value: "",
+        formType: "TextField",
+      },
+      {
+        id: 2,
+        label: "Password",
+        value: "",
+        formType: "PasswordField",
+      },
+    ]);
+    watch(isSignIn, (newValue: boolean) => {
+      // 新規登録の場合のみNameの欄表示
+      if (newValue) {
+        logInDataList.value.length = 2;
+      } else {
+        logInDataList.value.push({
+          id: 3,
+          label: "Name",
+          value: "デフォルト",
+          formType: "TextField",
+        });
+      }
+    });
+
+    function changeFormValue(value: string, id: number): void {
+      // フォームの入力内容をデータに反映
+      logInDataList.value[id - 1].value = value;
+    }
+
     const store = useStore();
-    
+
     function authenticate(): void {
       // サインインまたはサインアップ
       const methodName: string = isSignIn.value ? "signIn" : "signUp";
-      const authData: {name: string; id: string; password: string} = { // 認証情報
-        name: logInDataList.value[0].value,
-        id: logInDataList.value[1].value,
-        password: logInDataList.value[2].value,
+      const authData: { id: string; password: string; name: string } = {
+        // 認証情報
+        id: logInDataList.value[0].value,
+        password: logInDataList.value[1].value,
+        name: logInDataList.value[2]?.value,
       };
 
-      store.dispatch(`auth/${ methodName }`, authData);
+      store.dispatch(`auth/${methodName}`, authData);
     }
 
     return {
-      logInDataList,
-      changeFormValue,
-
       label,
       shiftMode,
+
+      logInDataList,
+      changeFormValue,
 
       authenticate,
     };

@@ -22,16 +22,16 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const isAuthed = computed(() => store.state.auth.isAuthed);
-    const linkLabel = computed(() => isAuthed.value ? "ログアウト" : "ログイン"); // アカウント状態変更リンクの表示文字
+    const isAuthed = computed(() => store.state.auth.isAuthed); // 認証されているかどうか
+    const linkLabel = computed(() => // アカウント状態変更リンクの表示文字
+      isAuthed.value ? "ログアウト" : "ログイン"
+    );
 
-    onBeforeMount(() => {
-      store.dispatch("auth/onAuthChanged");
-      store.dispatch("modal/closeModal");
-    })
+    store.dispatch("auth/onAuthChanged"); // 認証変化の検知
+    store.dispatch("modal/closeModal"); // 初期はモーダル閉じる
 
     return {
-      linkLabel
+      linkLabel,
     };
   },
 });
