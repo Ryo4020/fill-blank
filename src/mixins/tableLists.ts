@@ -13,7 +13,7 @@ export const HOME_TABLE_LIST: ItableContent[] = [
     {
         label: "問題数",
         key: "total",
-        width: 20,
+        width: 12,
     },
 ];
 
@@ -26,7 +26,7 @@ export const EDIT_TABLE_LIST: ItableContent[] = [
     {
         label: "空白数",
         key: "total",
-        width: 25,
+        width: 15,
     },
 ];
 
@@ -45,12 +45,12 @@ export const HOME_TABLE_OPERATOR_LIST: ItableOperator[] = [
     {
         label: "編集",
         key: "edit",
-        width: 10,
+        width: 14,
     },
     {
         label: "削除",
         key: "delete",
-        width: 10,
+        width: 14,
     },
 ];
 
@@ -58,11 +58,11 @@ export const EDIT_TABLE_OPERATOR_LIST: ItableOperator[] = [
     {
         label: "編集",
         key: "edit",
-        width: 10,
+        width: 15,
     },
     {
         label: "削除",
         key: "delete",
-        width: 10,
+        width: 15,
     },
 ];

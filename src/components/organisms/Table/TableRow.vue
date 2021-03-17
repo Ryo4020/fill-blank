@@ -60,8 +60,8 @@ export default defineComponent({
   },
   emits: ["click-row"],
   setup(props, context: SetupContext) {
-
-    function clickRow(operatorKey: string): void { // ボタン押すと対象のidとイベントの種類を渡す
+    function clickRow(operatorKey: string): void {
+      // ボタン押すと対象のidとイベントの種類を渡す
       context.emit("click-row", props.dataItem.id, operatorKey);
     }
 
@@ -74,7 +74,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .table-row {
-  height: 44px;
+  height: 60px;
   display: flex;
   align-items: center;
   background: white;
@@ -90,13 +90,16 @@ export default defineComponent({
   }
 
   &-operator {
+    height: 36px;
     padding: 0px 4px;
 
     &-box {
       width: 100%;
       height: 100%;
       background: rgb(240, 240, 240);
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       border: 2px solid black;
       white-space: nowrap;
       overflow-x: hidden;
