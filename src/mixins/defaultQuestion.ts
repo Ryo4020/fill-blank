@@ -3,13 +3,13 @@ export interface IgroupData {
     name: string;
     value: IquestionData[];
     total: number;
-};
+}
 
 export interface IquestionData {
     id: number;
     text: string;
     total: number;
-};
+}
 
 export const DEFAULT_QUESTION_LIST: IgroupData[] = [ // 最初に設定される問題グループの配列データ
     {
