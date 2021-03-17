@@ -1,8 +1,9 @@
 <template>
   <div class="edit">
-    <!-- 左上に固定 -->
+    <!-- 上に固定 -->
     <ArrowToHome />
 
+    <div class="edit-message">グループ {{ testGroupData.name }} の問題一覧</div>
     <SearchForm @search-event="search" />
     <div class="button-wrapper">
       <CommonButton label="新規追加" @click-event="addQuestion" />
@@ -10,7 +11,7 @@
     <TableComponent
       :headerList="editTableList"
       :operatorList="editOperatorList"
-      :data="questionList"
+      :data="testGroupData.value"
       @click-row="opeQuestion"
     />
   </div>
@@ -24,7 +25,7 @@ import ArrowToHome from "@/components/atoms/ArrowToHome.vue";
 import CommonButton from "@/components/atoms/CommonButton.vue";
 import SearchForm from "@/components/molecules/SearchForm.vue";
 import TableComponent, {
-  PropEditDataType as IquestionType,
+  PropHomeDataType as IgroupType,
 } from "@/components/organisms/Table/index.vue";
 
 import { EDIT_TABLE_LIST, EDIT_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
@@ -41,19 +42,26 @@ export default defineComponent({
     const editTableList = EDIT_TABLE_LIST; // 表の列データ
     const editOperatorList = EDIT_TABLE_OPERATOR_LIST; // 表のボタンのデータ
 
-    const questionList = ref<IquestionType[]>([
-      // 試験的な問題データ
+    const testGroupData = ref<IgroupType>(
+      // 試験的な問題グループデータ
       {
         id: 1,
-        text: "sample1",
+        name: "test1",
+        value: [
+          {
+            id: 1,
+            text: "sample1",
+            total: 2,
+          },
+          {
+            id: 2,
+            text: "sample2",
+            total: 3,
+          },
+        ],
         total: 2,
-      },
-      {
-        id: 2,
-        text: "sample2",
-        total: 3,
-      },
-    ]);
+      }
+    );
 
     function search(searchWord: string): void {
       // 問題を検索
@@ -83,8 +91,11 @@ export default defineComponent({
     return {
       editTableList,
       editOperatorList,
-      questionList,
+
+      testGroupData,
+
       search,
+
       addQuestion,
       opeQuestion,
     };
@@ -98,9 +109,10 @@ export default defineComponent({
   height: calc(100% - 72px); //ヘッダーの分引く
   display: grid;
   grid-template:
+    "..... msg    ....." 30px
     "..... search add  " 36px
-    "table table  table" calc(100% - 36px)
-    / minmax(84px, 1fr) minmax(160px, 480px) 80px;
+    "table table  table" calc(100% - 66px)
+    / minmax(80px, 4fr) minmax(320px, 560px) minmax(80px, 3fr);
   gap: 14px;
   position: relative;
   padding: 24px;
@@ -109,6 +121,15 @@ export default defineComponent({
     position: absolute;
     top: 16px;
     left: 16px;
+  }
+
+  &-message {
+    grid-area: msg;
+    font-size: 20px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .search-form {
@@ -126,14 +147,16 @@ export default defineComponent({
   }
 }
 
-@media screen and (max-width: 510px) {
-  // 幅が狭い場合は「一覧に戻る」の下に下がる
+@media screen and (max-width: 556px) {
+  // 幅が狭い場合はメッセージが「一覧に戻る」の下に入る
   .edit {
     grid-template:
+      "..... ...... ....." 16px
+      "msg   msg    msg  " 30px
       "..... search add  " 36px
-      "table table  table" calc(100% - 36px)
-      / 1fr minmax(160px, 480px) 80px;
-    padding: 52px 4px 24px 4px !important;
+      "table table  table" calc(100% - 66px)
+      / 1fr minmax(160px, 320px) 80px;
+    column-gap: 8px;
   }
 }
 </style>
