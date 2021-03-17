@@ -17,11 +17,11 @@ import { defineComponent, PropType, SetupContext } from "vue";
 import TableRow, {
   PropHomeDataType,
   PropEditDataType,
+  ItableContent,
+  ItableOperator,
 } from "@/components/organisms/Table/TableRow.vue";
 
-import { ItableContent, ItableOperator } from "@/mixins/tableLists";
-
-export { PropHomeDataType, PropEditDataType };
+export { PropHomeDataType, PropEditDataType, ItableContent, ItableOperator };
 
 export default defineComponent({
   name: "TableContent",
@@ -47,7 +47,6 @@ export default defineComponent({
   },
   emits: ["click-row"],
   setup(props, context: SetupContext) {
-    
     function clickRow(dataId: number, operatorKey: string): void {
       context.emit("click-row", dataId, operatorKey);
     }

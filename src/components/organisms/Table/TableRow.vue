@@ -24,20 +24,10 @@
 <script lang="ts">
 import { defineComponent, PropType, SetupContext } from "vue";
 
+import { IgroupData as PropHomeDataType, IquestionData as PropEditDataType } from "@/mixins/defaultQuestion";
 import { ItableContent, ItableOperator } from "@/mixins/tableLists";
 
-export type PropHomeDataType = {
-  id: number;
-  name: string;
-  value: PropEditDataType[];
-  total: number;
-};
-
-export type PropEditDataType = {
-  id: number;
-  text: string;
-  total: number;
-};
+export { PropHomeDataType, PropEditDataType, ItableContent, ItableOperator };
 
 export default defineComponent({
   name: "TableRow",

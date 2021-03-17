@@ -4,7 +4,7 @@
     <TableComponent
       :headerList="homeTableList"
       :operatorList="homeOperatorList"
-      :data="groupList"
+      :data="groupDataList"
       @click-row="opeGroup"
     />
     <div class="button-wrapper">
@@ -20,7 +20,7 @@ import { Router, useRouter } from "vue-router";
 
 import CommonButton from "@/components/atoms/CommonButton.vue";
 import TableComponent, {
-  PropHomeDataType as IgroupType,
+  PropHomeDataType as IgroupData,
 } from "@/components/organisms/Table/index.vue";
 
 import { HOME_TABLE_LIST, HOME_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
@@ -35,7 +35,7 @@ export default defineComponent({
     const homeTableList = HOME_TABLE_LIST; // 表の列データ
     const homeOperatorList = HOME_TABLE_OPERATOR_LIST; // 表のボタンのデータ
 
-    const groupList = ref<IgroupType[]>([
+    const groupDataList = ref<IgroupData[]>([
       // 試験的な問題グループデータ
       {
         id: 1,
@@ -112,7 +112,7 @@ export default defineComponent({
     return {
       homeTableList,
       homeOperatorList,
-      groupList,
+      groupDataList,
 
       userName,
 

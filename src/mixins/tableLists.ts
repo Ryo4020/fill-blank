@@ -4,7 +4,7 @@ export interface ItableContent {
     width: number;
 }
 
-export const HOME_TABLE_LIST: ItableContent[] = [
+export const HOME_TABLE_LIST: ItableContent[] = [ // ホーム画面の表の構成データ
     {
         label: "名前",
         key: "name",
@@ -17,7 +17,7 @@ export const HOME_TABLE_LIST: ItableContent[] = [
     },
 ];
 
-export const EDIT_TABLE_LIST: ItableContent[] = [
+export const EDIT_TABLE_LIST: ItableContent[] = [ // 編集画面の表の構成データ
     {
         label: "問題",
         key: "text",
@@ -36,7 +36,7 @@ export interface ItableOperator {
     width: number;
 }
 
-export const HOME_TABLE_OPERATOR_LIST: ItableOperator[] = [
+export const HOME_TABLE_OPERATOR_LIST: ItableOperator[] = [ // ホーム画面の表のボタンの構成データ
     {
         label: "開始",
         key: "exercise",
@@ -54,7 +54,7 @@ export const HOME_TABLE_OPERATOR_LIST: ItableOperator[] = [
     },
 ];
 
-export const EDIT_TABLE_OPERATOR_LIST: ItableOperator[] = [
+export const EDIT_TABLE_OPERATOR_LIST: ItableOperator[] = [ // 編集画面の表のボタンの構成データ
     {
         label: "編集",
         key: "edit",

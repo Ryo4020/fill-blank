@@ -9,9 +9,7 @@
 import { defineComponent, PropType, SetupContext } from "vue";
 
 import TableHeader from "@/components/organisms/Table/TableHeader.vue";
-import TableContent, { PropHomeDataType, PropEditDataType } from "@/components/organisms/Table/TableContent.vue";
-
-import { ItableContent, ItableOperator } from "@/mixins/tableLists";
+import TableContent, { PropHomeDataType, PropEditDataType, ItableContent, ItableOperator } from "@/components/organisms/Table/TableContent.vue";
 
 export { PropHomeDataType, PropEditDataType };
 
