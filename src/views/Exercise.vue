@@ -57,15 +57,7 @@ export default defineComponent({
         total: 3,
       },
     ]);
-    const questionId = ref<number>(NaN); // 実行中の問題番号
-
-    function randomQuestionId(): void { // 問題番号をランダムに決定
-      const length = testQuestion.value.length;
-      questionId.value = Math.floor(Math.random() * length);
-    }
-    onBeforeMount(() => { // 開始時に問題決定
-      randomQuestionId();
-    });
+    const questionId = ref<number>(0); // 実行中の問題番号（初めは０）
 
     function next(): void { // 次の問題に移る
       questionId.value++;
@@ -95,7 +87,7 @@ export default defineComponent({
       return isBlankOpenedList.value[(id + 1) / 2 - 1];
     }
 
-    // Exerciseの開始時と問題番号の変更時にすべて空白に
+    // Exerciseの開始時と問題番号の変更時に空欄をすべて空白に
     onMounted(() => {
       const blankTotal: number = testQuestion.value[questionId.value].total;
       setIsBlankOpend(blankTotal);
