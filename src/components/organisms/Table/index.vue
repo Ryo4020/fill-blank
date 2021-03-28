@@ -11,8 +11,6 @@ import { defineComponent, PropType, SetupContext } from "vue";
 import TableHeader from "@/components/organisms/Table/TableHeader.vue";
 import TableContent, { PropHomeDataType, PropEditDataType, ItableContent, ItableOperator } from "@/components/organisms/Table/TableContent.vue";
 
-export { PropHomeDataType, PropEditDataType };
-
 export default defineComponent({
   name: "TableComponent",
   components: {

@@ -12,7 +12,7 @@ export const actions: ActionTree<IauthState, RootState> = {
   signUp({ dispatch }, payload: { id: string; password: string; name: string }): void { // サインアップの処理
     firebase.auth().createUserWithEmailAndPassword(payload.id, payload.password)
       .then(user => {
-        dispatch("setUserDocument", user.user); // dbにデータ追加
+        dispatch("initUserDoc", user.user); // dbにデータ追加
         dispatch("updateUserName", { user: user.user, name: payload.name }); // ユーザーネームを設定
 
         // 成功したらモーダル閉じてホームへ
@@ -35,27 +35,29 @@ export const actions: ActionTree<IauthState, RootState> = {
   },
   signOut({ dispatch }): void { // ログアウト処理
     firebase.auth().signOut()
-      .then(() => {
+      .then(() => { // 成功したらモーダル閉じてホームへ
         dispatch("modal/closeModal", null, { root: true });
-        router.push('/'); // 成功したらホームへ
+        router.push('/');
       }).catch(error => {
         alert(error.message);
       })
   },
-  onAuthChanged({ commit }): void { // 認証情報の変更で自動的に書き換え
+  onAuthChanged(context): void { // 認証情報の変更で自動的に書き換え
     firebase.auth().onAuthStateChanged(user => {
-      const userData: firebase.User | undefined = user ? user : undefined;
-      commit("setUserData", userData);
-      commit("setSignInState", userData?.uid ? true : false);
-      commit("setUserName", userData?.uid ? userData.displayName : "ゲスト");
+      const userData: firebase.User | undefined = user ? user : undefined; // ユーザー情報（ログアウトしている場合undefined）
+      context.commit("setUserData", userData);
+      context.commit("setSignInState", userData?.uid ? true : false);
+      context.commit("setUserName", userData?.uid ? userData.displayName : "ゲスト");
+
+      context.dispatch("question/setGroupDataList", null, { root: true }); // グループリストの取得しなおし
     });
   },
-  setUserDocument(context, payload: firebase.User): void { // dbのuserコレクションにドキュメント追加
+  initUserDoc({ dispatch }, payload: firebase.User): void { // dbのusersコレクションにドキュメント追加
     firebase.firestore().collection('users').doc(payload.uid).set({
       uid: payload.uid,
       id: payload.email,
     }).then(() => {
-      console.log(payload.uid);
+      dispatch("question/initDefaultGroup", payload.uid, { root: true });
     });
   },
   async updateUserName({ dispatch }, payload: { user: firebase.User; name: string }): Promise<void> { // firebase上のユーザーネームを更新

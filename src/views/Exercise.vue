@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, onMounted, ref, watch } from "vue";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
 
 import BlankComponent from "@/components/atoms/BlankComponent.vue";
 import PlainText from "@/components/atoms/PlainText.vue";

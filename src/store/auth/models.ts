@@ -1,5 +1,7 @@
+import firebase from "firebase/app";
+
 export interface IauthState {
-  userData: object | undefined;
+  userData: firebase.User | undefined;
   isAuthed: boolean;
   userName: string;
 }

@@ -51,5 +51,6 @@ textarea {
   background: rgb(240, 240, 240);
   padding: 4px;
   outline: none;
+  resize: none;
 }
 </style>

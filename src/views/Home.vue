@@ -14,14 +14,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, onMounted } from "vue";
 import { useStore } from "vuex";
 import { Router, useRouter } from "vue-router";
 
 import CommonButton from "@/components/atoms/CommonButton.vue";
-import TableComponent, {
-  PropHomeDataType as IgroupData,
-} from "@/components/organisms/Table/index.vue";
+import TableComponent from "@/components/organisms/Table/index.vue";
 
 import { HOME_TABLE_LIST, HOME_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
 
@@ -35,27 +33,14 @@ export default defineComponent({
     const homeTableList = HOME_TABLE_LIST; // 表の列データ
     const homeOperatorList = HOME_TABLE_OPERATOR_LIST; // 表のボタンのデータ
 
-    const groupDataList = ref<IgroupData[]>([
-      // 試験的な問題グループデータ
-      {
-        id: 1,
-        name: "test1",
-        value: [],
-        total: 2,
-      },
-      {
-        id: 2,
-        name: "test2",
-        value: [],
-        total: 3,
-      },
-    ]);
-
     const store = useStore();
     const router: Router = useRouter();
 
     const isAuthed = computed(() => store.state.auth.isAuthed); // ログインしてるかどうか
-    const userName = computed(() => store.state.auth.userName); // 試験的なユーザー名
+    const userName = computed(() => store.state.auth.userName); // ユーザー名
+
+    store.dispatch("question/setGroupDataList"); // dbからグループリスト取得
+    const groupDataList = computed(() => store.state.question.groupDataList); // 問題グループリストのデータ
 
     function addGroup(): void {
       // グループの新規追加
@@ -68,9 +53,8 @@ export default defineComponent({
       }
     }
 
-    function startExercise(dataId: number): void {
+    function startExercise(): void {
       // 演習開始処理
-      console.log(dataId);
       router.push("/exercise");
     }
 
@@ -95,10 +79,12 @@ export default defineComponent({
     }
 
     function opeGroup(dataId: number, operatorKey: string): void {
+      store.commit("question/setGroupId", dataId); // 選択したグループidをvuexに
+
       // 押されたボタンの種類で分岐
       switch (operatorKey) {
         case "exercise": // グループの問題を演習
-          startExercise(dataId);
+          startExercise();
           break;
         case "edit": // グループの問題を編集
           startEdit();

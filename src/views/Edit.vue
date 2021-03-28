@@ -3,7 +3,7 @@
     <!-- 上に固定 -->
     <ArrowToHome />
 
-    <div class="edit-message">グループ {{ testGroupData.name }} の問題一覧</div>
+    <div class="edit-message">グループ {{ groupName }} の問題一覧</div>
     <SearchForm @search-event="search" />
     <div class="button-wrapper">
       <CommonButton label="新規追加" @click-event="addQuestion" />
@@ -11,22 +11,20 @@
     <TableComponent
       :headerList="editTableList"
       :operatorList="editOperatorList"
-      :data="testGroupData.value"
+      :data="questionDataList"
       @click-row="opeQuestion"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 
 import ArrowToHome from "@/components/atoms/ArrowToHome.vue";
 import CommonButton from "@/components/atoms/CommonButton.vue";
 import SearchForm from "@/components/molecules/SearchForm.vue";
-import TableComponent, {
-  PropHomeDataType as IgroupType,
-} from "@/components/organisms/Table/index.vue";
+import TableComponent from "@/components/organisms/Table/index.vue";
 
 import { EDIT_TABLE_LIST, EDIT_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
 
@@ -42,33 +40,15 @@ export default defineComponent({
     const editTableList = EDIT_TABLE_LIST; // 表の列データ
     const editOperatorList = EDIT_TABLE_OPERATOR_LIST; // 表のボタンのデータ
 
-    const testGroupData = ref<IgroupType>(
-      // 試験的な問題グループデータ
-      {
-        id: 1,
-        name: "test1",
-        value: [
-          {
-            id: 1,
-            text: "sample1",
-            total: 2,
-          },
-          {
-            id: 2,
-            text: "sample2",
-            total: 3,
-          },
-        ],
-        total: 2,
-      }
-    );
+    const store = useStore();
+
+    const questionDataList = computed(() => store.state.question.questionDataList); // 問題のリストデータ
+    const groupName = computed(() => store.getters["question/getGroupName"]); // グループネーム
 
     function search(searchWord: string): void {
       // 問題を検索
       console.log(searchWord);
     }
-
-    const store = useStore();
 
     function addQuestion(): void {
       // 問題の新規追加
@@ -77,7 +57,7 @@ export default defineComponent({
 
     function opeQuestion(dataId: number, operatorKey: string): void {
       // 押されたボタンの種類で分岐
-      console.log(dataId);
+      store.commit("question/setQuestionId", dataId); // 選択した問題idをvuexに
       switch (operatorKey) {
         case "edit": // グループの問題を編集
           store.dispatch("modal/setModal", "EditQuestionForm");
@@ -92,7 +72,8 @@ export default defineComponent({
       editTableList,
       editOperatorList,
 
-      testGroupData,
+      questionDataList,
+      groupName,
 
       search,
 
