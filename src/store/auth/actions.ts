@@ -49,7 +49,7 @@ export const actions: ActionTree<IauthState, RootState> = {
       context.commit("setSignInState", userData?.uid ? true : false);
       context.commit("setUserName", userData?.uid ? userData.displayName : "ゲスト");
 
-      context.dispatch("question/setGroupDataList", null, { root: true }); // グループリストの取得しなおし
+      context.dispatch("group/setGroupDataList", null, { root: true }); // グループリストの取得しなおし
     });
   },
   initUserDoc({ dispatch }, payload: firebase.User): void { // dbのusersコレクションにドキュメント追加
@@ -57,7 +57,7 @@ export const actions: ActionTree<IauthState, RootState> = {
       uid: payload.uid,
       id: payload.email,
     }).then(() => {
-      dispatch("question/initDefaultGroup", payload.uid, { root: true });
+      dispatch("group/initDefaultGroup", payload.uid, { root: true });
     });
   },
   async updateUserName({ dispatch }, payload: { user: firebase.User; name: string }): Promise<void> { // firebase上のユーザーネームを更新

@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from "vue";
+import { computed, ComputedRef, defineComponent } from "vue";
 import { useStore } from "vuex";
 import { Router, useRouter } from "vue-router";
 
@@ -22,6 +22,7 @@ import CommonButton from "@/components/atoms/CommonButton.vue";
 import TableComponent from "@/components/organisms/Table/index.vue";
 
 import { HOME_TABLE_LIST, HOME_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
+import { IgroupData } from "@/mixins/defaultQuestion";
 
 export default defineComponent({
   name: "Home",
@@ -36,11 +37,11 @@ export default defineComponent({
     const store = useStore();
     const router: Router = useRouter();
 
-    const isAuthed = computed(() => store.state.auth.isAuthed); // ログインしてるかどうか
-    const userName = computed(() => store.state.auth.userName); // ユーザー名
+    const isAuthed: ComputedRef<boolean> = computed(() => store.state.auth.isAuthed); // ログインしてるかどうか
+    const userName: ComputedRef<string> = computed(() => store.state.auth.userName); // ユーザー名
 
-    store.dispatch("question/setGroupDataList"); // dbからグループリスト取得
-    const groupDataList = computed(() => store.state.question.groupDataList); // 問題グループリストのデータ
+    store.dispatch("group/setGroupDataList"); // dbからグループリスト取得
+    const groupDataList: ComputedRef<IgroupData[]> = computed(() => store.state.group.groupDataList); // 問題グループリストのデータ
 
     function addGroup(): void {
       // グループの新規追加
@@ -53,16 +54,24 @@ export default defineComponent({
       }
     }
 
-    function startExercise(): void {
+    async function startExercise(dataId: number): Promise<void> {
       // 演習開始処理
-      router.push("/exercise");
+      const groupIndex: number = groupDataList.value.findIndex(({ id }) => id === dataId); // 開始するグループのID
+      const totalOfQuestion: number = groupDataList.value[groupIndex].total; // 開始するグループの問題数
+      if (totalOfQuestion > 0) { // 問題があるならExerciseへ
+        await store.dispatch("question/setQuestionDataList"); // 問題リスト設定
+        router.push("/exercise");
+      } else {
+        alert("このグループにまだ問題がありません");
+      }
     }
 
     function startEdit(): void {
       if (isAuthed.value) {
-        // 編集するにはログイン必要
+        store.dispatch("question/setQuestionDataList"); // 問題リスト設定
         router.push("/edit");
       } else {
+        // 編集するにはログイン必要
         alert("問題を編集するにはログインが必要です");
         store.dispatch("modal/setModal", "LogInForm");
       }
@@ -70,21 +79,22 @@ export default defineComponent({
 
     function openConfirmDelete(): void {
       if (isAuthed.value) {
-        // 削除するにはログイン必要
+        store.commit("group/setDeleteState", true);
         store.dispatch("modal/setModal", "ConfirmDelete");
       } else {
-        alert("問題を編集するにはログインが必要です");
+        // 削除するにはログイン必要
+        alert("グループを編集するにはログインが必要です");
         store.dispatch("modal/setModal", "LogInForm");
       }
     }
 
     function opeGroup(dataId: number, operatorKey: string): void {
-      store.commit("question/setGroupId", dataId); // 選択したグループidをvuexに
+      store.commit("group/setGroupId", dataId); // 選択したグループidをvuexに
 
       // 押されたボタンの種類で分岐
       switch (operatorKey) {
         case "exercise": // グループの問題を演習
-          startExercise();
+          startExercise(dataId);
           break;
         case "edit": // グループの問題を編集
           startEdit();

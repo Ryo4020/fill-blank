@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount } from "vue";
+import { computed, ComputedRef, defineComponent } from "vue";
 import { useStore } from "vuex";
 
 import GlobalHeader from "@/components/layouts/GlobalHeader.vue";
@@ -22,7 +22,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const isAuthed = computed(() => store.state.auth.isAuthed); // 認証されているかどうか
+    const isAuthed: ComputedRef<boolean> = computed(() => store.state.auth.isAuthed); // 認証されているかどうか
     const linkLabel = computed(() => // アカウント状態変更リンクの表示文字
       isAuthed.value ? "ログアウト" : "ログイン"
     );

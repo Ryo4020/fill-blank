@@ -59,8 +59,12 @@ export default defineComponent({
 
     function addGroup(): void {
       // グループを追加
-      console.log("追加");
-      closeModal();
+      if (addGroupData.value.value) { // グループ名があるなら追加
+        store.dispatch("group/addGroup", addGroupData.value.value);
+        closeModal();
+      } else {
+        alert("グループ名を入力してください");
+      }
     }
 
     return {

@@ -41,12 +41,15 @@ export default defineComponent({
     }
 
     function cancel(): void { // キャンセル
-      console.log("キャンセル");
       closeModal();
     }
 
     function confirm(): void { // 削除確定
-      console.log("削除");
+      if (store.state.group.deletingGroup) {
+        store.dispatch("group/deleteGroup");
+      } else if (store.state.group.deletingQuestion) {
+        console.log("削除");
+      }
       closeModal();
     }
 

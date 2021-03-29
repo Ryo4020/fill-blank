@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, ComputedRef, defineComponent } from "vue";
 import { useStore } from "vuex";
 
 import ArrowToHome from "@/components/atoms/ArrowToHome.vue";
@@ -27,6 +27,7 @@ import SearchForm from "@/components/molecules/SearchForm.vue";
 import TableComponent from "@/components/organisms/Table/index.vue";
 
 import { EDIT_TABLE_LIST, EDIT_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
+import { IquestionData } from "@/mixins/defaultQuestion";
 
 export default defineComponent({
   name: "Edit",
@@ -42,8 +43,8 @@ export default defineComponent({
 
     const store = useStore();
 
-    const questionDataList = computed(() => store.state.question.questionDataList); // 問題のリストデータ
-    const groupName = computed(() => store.getters["question/getGroupName"]); // グループネーム
+    const questionDataList: ComputedRef<IquestionData[]> = computed(() => store.state.question.questionDataList); // 問題のリストデータ
+    const groupName: ComputedRef<string> = computed(() => store.getters["group/getGroupName"]); // グループネーム
 
     function search(searchWord: string): void {
       // 問題を検索
@@ -92,7 +93,7 @@ export default defineComponent({
   grid-template:
     "..... msg    ....." 30px
     "..... search add  " 36px
-    "table table  table" calc(100% - 66px)
+    "table table  table" calc(100% - 94px)
     / minmax(80px, 4fr) minmax(320px, 560px) minmax(80px, 3fr);
   gap: 14px;
   position: relative;
@@ -135,7 +136,7 @@ export default defineComponent({
       "..... ...... ....." 16px
       "msg   msg    msg  " 30px
       "..... search add  " 36px
-      "table table  table" calc(100% - 66px)
+      "table table  table" calc(100% - 106px)
       / 1fr minmax(160px, 320px) 80px;
     column-gap: 8px;
   }
