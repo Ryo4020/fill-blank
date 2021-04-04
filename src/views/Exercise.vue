@@ -135,6 +135,7 @@ export default defineComponent({
 
   &-content {
     width: 90%;
+    min-width: 340px;
     display: grid;
     grid-template-rows: 48px 1fr;
     row-gap: 2px;
