@@ -163,7 +163,7 @@ export default defineComponent({
   }
 
   .button-wrapper {
-    width: 320px;
+    width: 340px;
     display: flex;
     justify-content: space-between;
     margin: 0 auto; // 左右中央揃え用
