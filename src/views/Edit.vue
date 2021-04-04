@@ -4,21 +4,21 @@
     <ArrowToHome />
 
     <div class="edit-message">グループ {{ groupName }} の問題一覧</div>
-    <SearchForm @search-event="search" />
+    <SearchForm :word="searchWord" @search-event="search" />
     <div class="button-wrapper">
       <CommonButton label="新規追加" @click-event="addQuestion" />
     </div>
     <TableComponent
       :headerList="editTableList"
       :operatorList="editOperatorList"
-      :data="questionDataList"
+      :data="filteredQuestionList"
       @click-row="opeQuestion"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent } from "vue";
+import { computed, ComputedRef, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 
 import ArrowToHome from "@/components/atoms/ArrowToHome.vue";
@@ -52,10 +52,17 @@ export default defineComponent({
       () => store.getters["group/getGroupName"]
     );
 
-    function search(searchWord: string): void {
-      // 問題を検索
-      console.log(searchWord);
+    const searchWord = ref<string>(""); // 検索ワード
+    function search(word: string): void {
+      // 検索ワードを更新
+      searchWord.value = word;
     }
+    const filteredQuestionList: ComputedRef<IquestionData[]> = computed( // 表示する問題のリストデータ
+      () => questionDataList.value.filter((item) => {
+        const result: number = item.text.indexOf(searchWord.value); // ワードが一致した最初のインデックス
+        return result !== -1;
+      })
+    );
 
     function addQuestion(): void {
       // 問題の新規追加
@@ -79,10 +86,11 @@ export default defineComponent({
       editTableList,
       editOperatorList,
 
-      questionDataList,
       groupName,
 
+      searchWord,
       search,
+      filteredQuestionList,
 
       addQuestion,
       opeQuestion,

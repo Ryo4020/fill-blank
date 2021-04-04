@@ -19,9 +19,16 @@ export default defineComponent({
     TextField,
     CommonButton,
   },
+  props: {
+    word: {
+      // 入力される文字列
+      type: String,
+      required: true,
+    },
+  },
   emits: ["search-event"],
   setup(props, context: SetupContext) {
-    const searchWord = ref<string>(""); // 検索ワード
+    const searchWord = ref<string>(props.word); // 検索ワードをコピー
 
     function search(): void { // 検索開始
       context.emit("search-event", searchWord.value);
