@@ -5,7 +5,6 @@ import {
 export interface IgroupState {
     groupDataList: IgroupData[];
     currentGroupId: number;
-    deletingGroup: boolean;
 }
 
 export class GroupState implements IgroupState {
@@ -21,5 +20,4 @@ export class GroupState implements IgroupState {
     }];
 
     currentGroupId = 0; // 作業中グループのid
-    deletingGroup = false; // 削除対象かどうか
 }

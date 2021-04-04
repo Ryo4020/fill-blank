@@ -4,7 +4,7 @@
       <div class="header-label">新規追加</div>
     </template>
     <template v-slot:content>
-      <div class="content-description">説明</div>
+      <div class="content-description">  空白にしたい箇所を｜（全角）で囲んで問題文を入力してください</div>
       <TextArea v-model="questionText" :row="13" label="ここに問題文を入力" />
     </template>
     <template v-slot:footerLeft>
@@ -33,11 +33,11 @@ export default defineComponent({
     TextArea,
     CommonButton,
   },
-  setup() { 
+  setup() {
     const questionText = ref<string>(""); // 入力される問題文
 
     const store = useStore();
-    
+
     function closeModal(): void {
       // モーダル閉じる処理
       store.dispatch("modal/closeModal");
@@ -45,8 +45,18 @@ export default defineComponent({
 
     function addQuestion(): void {
       // グループを追加
-      console.log("追加");
-      closeModal();
+      const blankTotal: number = Math.floor( // 空白の数
+        questionText.value.split("｜").length / 2
+      );
+      if (blankTotal === 0) {
+        alert("空欄がありません");
+      } else {
+        store.dispatch("question/addQuestion", {
+          text: questionText.value,
+          total: blankTotal,
+        });
+        closeModal();
+      }
     }
 
     return {
@@ -65,11 +75,13 @@ export default defineComponent({
 
 .content-description {
   height: 64px;
-  font-size: 20px;
+  font-size: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
   background: silver;
+  padding: 2px;
+  white-space: pre-wrap;
 }
 
 .button-wrapper {

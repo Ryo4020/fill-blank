@@ -14,7 +14,4 @@ export const mutations: MutationTree<IquestionState> = {
   setQuestionId(state: IquestionState, payload: number): void { // 問題ID変更
     state.currentQuestionId = payload;
   },
-  setDeleteState(state: IquestionState, payload: boolean): void { // 削除対象かを変更
-    state.deletingQuestion = payload;
-  },
 };

@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, ref, watch } from "vue";
+import { computed, ComputedRef, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 
 import BlankComponent from "@/components/atoms/BlankComponent.vue";
@@ -44,22 +44,15 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const questionDataList: ComputedRef<IquestionData[]> = computed( // 問題のリストデータ
+    const questionDataList: ComputedRef<IquestionData[]> = computed(
+      // 問題のリストデータ
       () => store.state.question.questionDataList
     );
     const questionId = ref<number>(0); // 実行中の問題番号（初めは０）
 
-    function next(): void {
-      // 次の問題に移る
-      questionId.value++;
-      if (questionId.value === questionDataList.value.length) {
-        questionId.value = 0;
-      }
-    }
-
     const questionTextArray = computed(() =>
       // 問題文を空白とその他で分割して配列に
-      questionDataList.value[questionId.value].text.split("$")
+      questionDataList.value[questionId.value].text.split("｜")
     );
 
     const setTextComponent = computed(() => {
@@ -83,11 +76,8 @@ export default defineComponent({
       return isBlankOpenedList.value[(id + 1) / 2 - 1];
     }
 
-    // Exerciseの開始時と問題番号の変更時に空欄をすべて空白に
+    // Exerciseの開始時に空欄をすべて空白に
     setIsBlankOpend();
-    watch(questionId, () => {
-      setIsBlankOpend();
-    });
 
     function shiftBlankState(id: number): void {
       // 空白の答え表示の切り替え
@@ -97,6 +87,15 @@ export default defineComponent({
     function openAll(): void {
       // 全ての解答を表示
       isBlankOpenedList.value.fill(true);
+    }
+
+    function next(): void {
+      // 次の問題に移る
+      questionId.value++;
+      if (questionId.value === questionDataList.value.length) {
+        questionId.value = 0;
+      }
+      setIsBlankOpend(); // 全て空欄に
     }
 
     return {

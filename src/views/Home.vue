@@ -79,7 +79,6 @@ export default defineComponent({
 
     function openConfirmDelete(): void {
       if (isAuthed.value) {
-        store.commit("group/setDeleteState", true);
         store.dispatch("modal/setModal", "ConfirmDelete");
       } else {
         // 削除するにはログイン必要

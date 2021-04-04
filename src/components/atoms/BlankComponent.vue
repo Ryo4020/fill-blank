@@ -1,6 +1,6 @@
 <template>
   <div :class="['blank', setClassOpen]" @click="clickBlank">
-    {{ text }}{{ blankId }}{{ isOpened }}
+    {{ text }}
   </div>
 </template>
 

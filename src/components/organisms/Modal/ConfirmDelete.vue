@@ -4,7 +4,9 @@
       <div class="header-label">確認</div>
     </template>
     <template v-slot:content>
-      <div class="content-message">削除されたデータは復元できません。本当に削除しますか？</div>
+      <div class="content-message">
+        削除されたデータは復元できません。本当に削除しますか？
+      </div>
     </template>
     <template v-slot:footerLeft>
       <div class="footer-wrapper">
@@ -22,6 +24,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 
 import ModalFrame from "@/components/organisms/Modal/ModalFrame.vue";
 import CommonButton from "@/components/atoms/CommonButton.vue";
@@ -34,21 +37,26 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-    
+    const route = useRoute();
+
     function closeModal(): void {
       // モーダル閉じる処理
       store.dispatch("modal/closeModal");
     }
 
-    function cancel(): void { // キャンセル
+    function cancel(): void {
+      // キャンセル
       closeModal();
     }
 
-    function confirm(): void { // 削除確定
-      if (store.state.group.deletingGroup) {
+    function confirm(): void {
+      // 削除確定
+      if (route.path === "/") { // グループの削除
         store.dispatch("group/deleteGroup");
-      } else if (store.state.group.deletingQuestion) {
-        console.log("削除");
+      } else if (route.path === "/edit") { // 問題の削除
+        store.dispatch("question/deleteQuestion");
+      } else {
+        alert("エラーで削除に失敗しました。もう一度選択してください。");
       }
       closeModal();
     }

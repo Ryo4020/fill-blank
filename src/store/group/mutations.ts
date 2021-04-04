@@ -14,7 +14,4 @@ export const mutations: MutationTree<IgroupState> = {
   setGroupId(state: IgroupState, payload: number): void { // グループID変更
     state.currentGroupId = payload;
   },
-  setDeleteState(state: IgroupState, payload: boolean): void { // 削除対象かを変更
-    state.deletingGroup = payload;
-  },
 };

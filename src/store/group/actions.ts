@@ -46,7 +46,7 @@ export const actions: ActionTree<IgroupState, RootState> = {
   async addGroup(context, payload: string): Promise<void> { // グループ新規追加
     // 今あるグループIDの最後を取得
     const userUid = context.rootGetters["auth/getUserUid"];
-    let lastId = NaN;
+    let lastId = 0; // まだ存在しない場合は初期値の0
     await firebase.firestore().collection('users').doc(userUid).collection('group').orderBy('id', 'desc').limit(1).get().then((doc) => {
       doc.forEach(element => {
         lastId = element.data().id;
@@ -61,7 +61,9 @@ export const actions: ActionTree<IgroupState, RootState> = {
   async deleteGroup(context): Promise<void> { // グループ削除
     const userUid = context.rootGetters["auth/getUserUid"];
     const groupDocId: string = context.getters.getGroupDocId;
-    await firebase.firestore().collection('users').doc(userUid).collection('group').doc(groupDocId).delete()
+    const groupDocRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData> = firebase.firestore().collection('users').doc(userUid).collection('group').doc(groupDocId);
+
+    await groupDocRef.delete()
       .then(() => {
         alert("削除できました");
       })
@@ -71,7 +73,24 @@ export const actions: ActionTree<IgroupState, RootState> = {
       });
 
     context.dispatch("setGroupDataList");
-    context.commit("setDeleteState", false);
+    context.dispatch("deleteSubCollection", groupDocRef); // グループ削除後の問題データ削除
+  },
+  deleteSubCollection(context, payload: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>): void {
+    // グループ下のクエスションサブコレクションの削除
+    payload.collection('question').get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        doc.ref.delete()
+      });
+    });
+  },
+  async updateTotal(context, payload: { docRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>; mode: string }): Promise<void> {
+    // 問題追加削除後にグループの問題数変更
+    const questionTotal: number = context.getters.getGroupTotal;
+    if (payload.mode === "add") { // 増加後に加算
+      await payload.docRef.update({ total: questionTotal + 1 });
+    } else { // 削除後に減算
+      await payload.docRef.update({ total: questionTotal - 1 });
+    }
   },
   error({ commit }, payload: string): void {
     commit("setErrorMessage", payload);

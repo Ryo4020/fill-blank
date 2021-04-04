@@ -4,7 +4,7 @@
       <div class="header-label">編集</div>
     </template>
     <template v-slot:content>
-      <div class="content-description">説明</div>
+      <div class="content-description">  空白にしたい箇所を｜（全角）で囲んで問題文を入力してください</div>
       <TextArea v-model="questionText" :row="13" label="ここに問題文を入力" />
     </template>
     <template v-slot:footerLeft>
@@ -35,25 +35,37 @@ export default defineComponent({
     TextArea,
     CommonButton,
   },
-  setup() { 
-    const questionText = ref<string>(""); // 試験的な編集される問題文
-
+  setup() {
     const store = useStore();
-    
+
+    const questionText = ref<string>(
+      store.getters["question/getQuestionData"].text
+    ); // 編集される問題文
+
     function closeModal(): void {
       // モーダル閉じる処理
       store.dispatch("modal/closeModal");
     }
 
-    function back(): void { // キャンセル
-      console.log("もどる");
+    function back(): void {
+      // キャンセル
       closeModal();
     }
 
     function updateQuestion(): void {
       // グループを更新
-      console.log("変更");
-      closeModal();
+      const blankTotal: number = Math.floor( // 空白の数
+        questionText.value.split("｜").length / 2
+      );
+      if (blankTotal === 0) {
+        alert("空欄がありません");
+      } else {
+        store.dispatch("question/updateQuestion", {
+          text: questionText.value,
+          total: blankTotal,
+        });
+        closeModal();
+      }
     }
 
     return {
@@ -73,11 +85,13 @@ export default defineComponent({
 
 .content-description {
   height: 64px;
-  font-size: 20px;
+  font-size: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
   background: silver;
+  padding: 2px;
+  white-space: pre-wrap;
 }
 
 .footer-wrapper {

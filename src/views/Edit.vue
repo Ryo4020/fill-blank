@@ -43,8 +43,14 @@ export default defineComponent({
 
     const store = useStore();
 
-    const questionDataList: ComputedRef<IquestionData[]> = computed(() => store.state.question.questionDataList); // 問題のリストデータ
-    const groupName: ComputedRef<string> = computed(() => store.getters["group/getGroupName"]); // グループネーム
+    store.dispatch("question/setQuestionDataList"); // 問題リスト設定
+
+    const questionDataList: ComputedRef<IquestionData[]> = computed( // 問題のリストデータ
+      () => store.state.question.questionDataList
+    );
+    const groupName: ComputedRef<string> = computed( // グループネーム
+      () => store.getters["group/getGroupName"]
+    );
 
     function search(searchWord: string): void {
       // 問題を検索
@@ -120,8 +126,7 @@ export default defineComponent({
 
   .button-wrapper {
     grid-area: add;
-    display: flex;
-    align-items: center;
+    text-align: right;
   }
 
   .table {
