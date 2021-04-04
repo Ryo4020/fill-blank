@@ -3,6 +3,8 @@ import Home from '../views/Home.vue';
 import Exercise from '../views/Exercise.vue';
 import Edit from '../views/Edit.vue';
 
+import store from '../store';
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -12,12 +14,20 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/exercise',
     name: 'Exercise',
-    component: Exercise,
+    component: Exercise
   },
   {
     path: '/edit',
     name: 'Edit',
     component: Edit,
+    beforeEnter: (to, from, next) => {
+      // ログインしていない場合、ホームに戻す
+      if (store.state.auth.isAuthed) {
+        next();
+      } else {
+        next('/');
+      }
+    },
   },
 ];
 

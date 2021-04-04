@@ -1,12 +1,19 @@
-import { createStore } from 'vuex';
+import Vuex from 'vuex';
+import { auth } from './auth/index';
+import { group } from './group/index';
+import { modal } from './modal/index';
+import { question } from './question/index';
 
-export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
+import createPersistedState from "vuex-persistedstate";
+
+export default new Vuex.Store({
   modules: {
-  }
+    auth,
+    group,
+    modal,
+    question,
+  },
+  plugins: [
+    createPersistedState()
+  ]
 });
