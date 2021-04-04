@@ -54,13 +54,14 @@ export const actions: ActionTree<IquestionState, RootState> = {
 
     const questionData: IquestionData = { id: lastId + 1, ...payload };
     await groupDocRef.collection('question').add(questionData)
-      .then()
+      .then(() => {
+        context.dispatch("group/updateTotal", { docRef: groupDocRef, mode: "add" }, { root: true }); // グループの問題数データ加算
+      })
       .catch((error) => {
         console.log(error);
       });
 
     context.dispatch("setQuestionDataList");
-    context.dispatch("group/updateTotal", { docRef: groupDocRef, mode: "add" }, { root: true }); // グループの問題数データ加算
   },
   async deleteQuestion(context): Promise<void> { // 問題削除
     const userUid = context.rootGetters["auth/getUserUid"];
@@ -72,12 +73,12 @@ export const actions: ActionTree<IquestionState, RootState> = {
         doc.forEach(element => {
           element.ref.delete().then(() => { // 該当ドキュメント削除
             alert("削除できました");
+            context.dispatch("group/updateTotal", { docRef: groupDocRef, mode: "delete" }, { root: true }); // グループの問題数データ減算
           });
         });
       });
 
     context.dispatch("setQuestionDataList");
-    context.dispatch("group/updateTotal", { docRef: groupDocRef, mode: "delete" }, { root: true }); // グループの問題数データ減算
   },
   async updateQuestion(context, payload: { text: string; total: number }): Promise<void> { // 問題分の更新
     // dbのグループドキュメント取得

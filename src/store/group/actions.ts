@@ -91,6 +91,8 @@ export const actions: ActionTree<IgroupState, RootState> = {
     } else { // 削除後に減算
       await payload.docRef.update({ total: questionTotal - 1 });
     }
+
+    context.dispatch("setGroupDataList");
   },
   error({ commit }, payload: string): void {
     commit("setErrorMessage", payload);

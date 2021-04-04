@@ -16,6 +16,7 @@
       </div>
     </div>
     <div class="button-wrapper">
+      <CommonButton label="前の問題へ" @click-event="back" />
       <CommonButton label="すべて解答表示" @click-event="openAll" />
       <CommonButton label="次の問題へ" @click-event="next" />
     </div>
@@ -84,6 +85,15 @@ export default defineComponent({
       isBlankOpenedList.value[id - 1] = !isBlankOpenedList.value[id - 1];
     }
 
+    function back(): void {
+      // 前の問題に移る
+      questionId.value--;
+      if (questionId.value === -1) {
+        questionId.value = questionDataList.value.length - 1;
+      }
+      setIsBlankOpend(); // 全て空欄に
+    }
+
     function openAll(): void {
       // 全ての解答を表示
       isBlankOpenedList.value.fill(true);
@@ -100,13 +110,15 @@ export default defineComponent({
 
     return {
       questionTextArray,
-      next,
 
       setTextComponent,
 
-      shiftBlankState,
       getIsBlankOpened,
+      shiftBlankState,
+
+      back,
       openAll,
+      next,
     };
   },
 });
@@ -151,7 +163,7 @@ export default defineComponent({
   }
 
   .button-wrapper {
-    width: 240px;
+    width: 320px;
     display: flex;
     justify-content: space-between;
     margin: 0 auto; // 左右中央揃え用

@@ -123,12 +123,13 @@ export default defineComponent({
   width: 100%;
   height: calc(100% - 72px); //ヘッダーの分引く
   display: grid;
-  grid-template-rows: 22px calc(100% - 86px) 32px;
+  grid-template-rows: 26px calc(100% - 90px) 32px;
   row-gap: 16px;
   padding: 24px;
 
   &-message {
     width: 80%;
+    font-size: 20px;
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
