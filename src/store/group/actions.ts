@@ -14,11 +14,11 @@ export const actions: ActionTree<IgroupState, RootState> = {
     const defaultGroupList = DEFAULT_GROUP_LIST;
     const defaultQuestionList: IquestionData[][] = DEFAULT_QUESTION_LIST;
 
-    const subCollectionRef = firebase.firestore().collection('users').doc(payload).collection('group'); // usersのドキュメント下のgroupサブコレクション
     for (let i = 0; i < defaultGroupList.length; i++) {
-      subCollectionRef.doc("Group" + String(i + 1)).set(defaultGroupList[i]); // グループコレクションのドキュメントIDの数字はグループのidと同じ
+      const groupDocRef = firebase.firestore().collection('users').doc(payload).collection('group').doc(); // usersのドキュメント下のgroupサブコレクションのドキュメント
+      groupDocRef.set(defaultGroupList[i]); // グループコレクションのドキュメントIDはランダム
 
-      const subQCollectionRef = subCollectionRef.doc("Group" + String(i + 1)).collection('question'); // グループコレクション下にクエスチョンサブコレクション追加
+      const subQCollectionRef = groupDocRef.collection('question'); // グループコレクション下にクエスチョンサブコレクション追加
       dispatch("question/initDefaultQuestion", { collectionRef: subQCollectionRef, list: defaultQuestionList[i] }, { root: true });
     }
   },
@@ -54,32 +54,37 @@ export const actions: ActionTree<IgroupState, RootState> = {
     });
 
     // 新グループをdbに追加
-    const newGroup: IgroupData = { id: lastId + 1, name: payload, total: 0 }
-    await firebase.firestore().collection('users').doc(userUid).collection('group').doc("Group" + String(lastId + 1)).set(newGroup);
+    const newGroup: IgroupData = { id: lastId + 1, name: payload, total: 0 };
+    await firebase.firestore().collection('users').doc(userUid).collection('group').add(newGroup);
     context.dispatch("setGroupDataList");
   },
   async deleteGroup(context): Promise<void> { // グループ削除
     const userUid = context.rootGetters["auth/getUserUid"];
-    const groupDocId: string = context.getters.getGroupDocId;
-    const groupDocRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData> = firebase.firestore().collection('users').doc(userUid).collection('group').doc(groupDocId);
+    let docId = "";
+    const groupCollectionRef: firebase.firestore.CollectionReference<firebase.firestore.DocumentData> = firebase.firestore().collection('users').doc(userUid).collection('group');
 
-    await groupDocRef.delete()
-      .then(() => {
-        alert("削除できました");
-      })
-      .catch((error) => {
-        alert("削除できませんでした");
-        console.log(error);
+    await groupCollectionRef.where("id", "==", context.state.currentGroupId).get() // idでクエリ
+      .then((querySnapshot) => {
+        querySnapshot.forEach(doc => {
+          docId = doc.id; // ドキュメントID取得
+
+          doc.ref.delete().then(() => { // 該当ドキュメント削除
+            alert("削除できました");
+          }).catch((error) => {
+            alert("削除できませんでした");
+            console.log(error);
+          });
+        });
       });
 
     context.dispatch("setGroupDataList");
-    context.dispatch("deleteSubCollection", groupDocRef); // グループ削除後の問題データ削除
+    context.dispatch("deleteSubCollection", groupCollectionRef.doc(docId)); // グループ削除後の問題データ削除
   },
   deleteSubCollection(context, payload: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>): void {
     // グループ下のクエスションサブコレクションの削除
     payload.collection('question').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        doc.ref.delete()
+        doc.ref.delete();
       });
     });
   },
