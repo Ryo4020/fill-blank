@@ -9,6 +9,19 @@ import {
   DEFAULT_QUESTION_LIST, IquestionData
 } from "@/mixins/defaultQuestion";
 
+async function getGroupDocRef(userUid: string, groupId: number): Promise<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>> { // 操作するグループドキュメント取得
+  let docId = "";
+  const groupCollectionRef: firebase.firestore.CollectionReference<firebase.firestore.DocumentData> = firebase.firestore().collection('users').doc(userUid).collection('group');
+
+  await groupCollectionRef.where("id", "==", groupId).get() // idでクエリ
+    .then((querySnapshot) => {
+      querySnapshot.forEach(doc => {
+        docId = doc.id; // ドキュメントID取得
+      });
+    });
+  return groupCollectionRef.doc(docId);
+}
+
 export const actions: ActionTree<IquestionState, RootState> = {
   initDefaultQuestion(context, payload: { collectionRef: firebase.firestore.CollectionReference<firebase.firestore.DocumentData>; list: IquestionData[] }): void {
     // クエスチョンサブコレクションにドキュメント追加
@@ -19,9 +32,10 @@ export const actions: ActionTree<IquestionState, RootState> = {
   async setQuestionDataList(context): Promise<void> { // 指定のグループの問題リストを取得してvuexに
     if (context.rootState.auth.isAuthed) {
       const userUid = context.rootGetters["auth/getUserUid"];
-      const groupDocId: string = context.rootGetters["group/getGroupDocId"];
       const userQuestionList: firebase.firestore.DocumentData[] = [];
-      await firebase.firestore().collection('users').doc(userUid).collection('group').doc(groupDocId).collection('question').orderBy("id").get()
+      const groupDocRef = await getGroupDocRef(userUid, context.rootState.group.currentGroupId);
+
+      await groupDocRef.collection('question').orderBy("id").get()
         .then((doc) => {
           doc.forEach(element => {
             userQuestionList.push(element.data()); // 取得したデータを配列に
@@ -41,8 +55,7 @@ export const actions: ActionTree<IquestionState, RootState> = {
   },
   async addQuestion(context, payload: { text: string; total: number }): Promise<void> { // 問題を追加
     const userUid = context.rootGetters["auth/getUserUid"];
-    const groupDocId: string = context.rootGetters["group/getGroupDocId"];
-    const groupDocRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData> = firebase.firestore().collection('users').doc(userUid).collection('group').doc(groupDocId);
+    const groupDocRef = await getGroupDocRef(userUid, context.rootState.group.currentGroupId);
 
     // 最後の問題IDをdbから取得
     let lastId = 0; // まだ存在しない場合はデフォルト値の0
@@ -65,14 +78,12 @@ export const actions: ActionTree<IquestionState, RootState> = {
   },
   async deleteQuestion(context): Promise<void> { // 問題削除
     const userUid = context.rootGetters["auth/getUserUid"];
-    const groupDocId: string = context.rootGetters["group/getGroupDocId"];
-    const groupDocRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData> = firebase.firestore().collection('users').doc(userUid).collection('group').doc(groupDocId);
+    const groupDocRef = await getGroupDocRef(userUid, context.rootState.group.currentGroupId);
 
     await groupDocRef.collection('question').where("id", "==", context.state.currentQuestionId).get() // idでクエリ
       .then((doc) => {
         doc.forEach(element => {
           element.ref.delete().then(() => { // 該当ドキュメント削除
-            alert("削除できました");
             context.dispatch("group/updateTotal", { docRef: groupDocRef, mode: "delete" }, { root: true }); // グループの問題数データ減算
           });
         });
@@ -83,8 +94,7 @@ export const actions: ActionTree<IquestionState, RootState> = {
   async updateQuestion(context, payload: { text: string; total: number }): Promise<void> { // 問題分の更新
     // dbのグループドキュメント取得
     const userUid = context.rootGetters["auth/getUserUid"];
-    const groupDocId: string = context.rootGetters["group/getGroupDocId"];
-    const groupDocRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData> = firebase.firestore().collection('users').doc(userUid).collection('group').doc(groupDocId);
+    const groupDocRef = await getGroupDocRef(userUid, context.rootState.group.currentGroupId);
 
     await groupDocRef.collection('question').where("id", "==", context.state.currentQuestionId).get() // idでクエリ
       .then((doc) => {

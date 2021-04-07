@@ -11,7 +11,4 @@ export const getters: GetterTree<IgroupState, RootState> = {
         const index = state.groupDataList.findIndex(({ id }) => id === state.currentGroupId);
         return state.groupDataList[index].total;
     },
-    getGroupDocId(state: IgroupState): string { // グループコレクションのドキュメントID
-        return "Group" + String(state.currentGroupId);
-    },
 };
