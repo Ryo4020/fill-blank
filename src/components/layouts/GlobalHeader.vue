@@ -35,9 +35,9 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const iconName = computed(() =>
+    const iconName = computed(() => // ログイン状況でiconを変更
       props.linkLabel === "ログイン" ? "log-in" : "log-out"
-    ); // ログイン状況でiconを変更
+    );
 
     const store = useStore();
 
