@@ -4,7 +4,9 @@
       <div class="header-label">新規追加</div>
     </template>
     <template v-slot:content>
-      <div class="content-description">  空白にしたい箇所を｜（全角）で囲んで問題文を入力してください</div>
+      <div class="content-description">
+        空白にしたい箇所を｜（全角）で囲んで問題文を入力してください
+      </div>
       <TextArea v-model="questionText" :row="13" label="ここに問題文を入力" />
     </template>
     <template v-slot:footerLeft>
@@ -12,7 +14,7 @@
     </template>
     <template v-slot:footerRight>
       <div class="button-wrapper">
-        <CommonButton label="追加" @click-event="addQuestion" />
+        <CommonButton label="追加" @click-event="addQuestion(questionText)" />
       </div>
     </template>
   </ModalFrame>
@@ -20,11 +22,12 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { useStore } from "vuex";
 
 import ModalFrame from "@/components/organisms/Modal/ModalFrame.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import CommonButton from "@/components/atoms/CommonButton.vue";
+
+import useQuestion from "@/composables/use-question";
 
 export default defineComponent({
   name: "AddQuestionForm",
@@ -36,28 +39,7 @@ export default defineComponent({
   setup() {
     const questionText = ref<string>(""); // 入力される問題文
 
-    const store = useStore();
-
-    function closeModal(): void {
-      // モーダル閉じる処理
-      store.dispatch("modal/closeModal");
-    }
-
-    function addQuestion(): void {
-      // グループを追加
-      const blankTotal: number = Math.floor( // 空白の数
-        questionText.value.split("｜").length / 2
-      );
-      if (blankTotal === 0) {
-        alert("空欄がありません");
-      } else {
-        store.dispatch("question/addQuestion", {
-          text: questionText.value,
-          total: blankTotal,
-        });
-        closeModal();
-      }
-    }
+    const { addQuestion } = useQuestion();
 
     return {
       questionText,

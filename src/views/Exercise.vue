@@ -24,15 +24,15 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, ref } from "vue";
-import { useStore } from "vuex";
+import { computed, defineComponent } from "vue";
 
 import BlankComponent from "@/components/atoms/BlankComponent.vue";
 import PlainText from "@/components/atoms/PlainText.vue";
 import ArrowToHome from "@/components/atoms/ArrowToHome.vue";
 import CommonButton from "@/components/atoms/CommonButton.vue";
 
-import { IquestionData } from "@/mixins/defaultQuestion";
+import useQuestion from "@/composables/use-question";
+import useExerciseQuestion from "@/composables/use-exercise-question";
 
 export default defineComponent({
   name: "Exercise",
@@ -43,18 +43,19 @@ export default defineComponent({
     CommonButton,
   },
   setup() {
-    const store = useStore();
+    const { questionDataList } = useQuestion(); // 問題のリストデータ
 
-    const questionDataList: ComputedRef<IquestionData[]> = computed(
-      // 問題のリストデータ
-      () => store.state.question.questionDataList
-    );
-    const questionId = ref<number>(0); // 実行中の問題番号（初めは０）
+    const {
+      questionTextArray, // 問題文を空白とその他で分割して配列に
 
-    const questionTextArray = computed(() =>
-      // 問題文を空白とその他で分割して配列に
-      questionDataList.value[questionId.value].text.split("｜")
-    );
+      setIsBlankOpend, // 全ての空欄を隠す処理
+      getIsBlankOpened, // 表示状態の取得
+      shiftBlankState, // 空白の答え表示の切り替え
+
+      back, // 前の問題へ
+      openAll, // 全ての解答を表示
+      next, // 次の問題へ
+    } = useExerciseQuestion(questionDataList);
 
     const setTextComponent = computed(() => {
       // 空白とその他で違うコンポーネントに
@@ -63,55 +64,11 @@ export default defineComponent({
       };
     });
 
-    const isBlankOpenedList = ref<boolean[]>([]); // 表示状態を順にした配列
-    function setIsBlankOpend(): void {
-      // 問題が出た時に中身をfalseに
-      const blankTotal: number = questionDataList.value[questionId.value].total;
-      isBlankOpenedList.value.splice(-isBlankOpenedList.value.length);
-      for (let i = 0; i < blankTotal; i++) {
-        isBlankOpenedList.value[i] = false;
-      }
-    }
-    function getIsBlankOpened(id: number): boolean {
-      // 表示状態の取得
-      return isBlankOpenedList.value[(id + 1) / 2 - 1];
-    }
-
     // Exerciseの開始時に空欄をすべて空白に
     setIsBlankOpend();
 
-    function shiftBlankState(id: number): void {
-      // 空白の答え表示の切り替え
-      isBlankOpenedList.value[id - 1] = !isBlankOpenedList.value[id - 1];
-    }
-
-    function back(): void {
-      // 前の問題に移る
-      questionId.value--;
-      if (questionId.value === -1) {
-        questionId.value = questionDataList.value.length - 1;
-      }
-      setIsBlankOpend(); // 全て空欄に
-    }
-
-    function openAll(): void {
-      // 全ての解答を表示
-      isBlankOpenedList.value.fill(true);
-    }
-
-    function next(): void {
-      // 次の問題に移る
-      questionId.value++;
-      if (questionId.value === questionDataList.value.length) {
-        questionId.value = 0;
-      }
-      setIsBlankOpend(); // 全て空欄に
-    }
-
     return {
       questionTextArray,
-
-      setTextComponent,
 
       getIsBlankOpened,
       shiftBlankState,
@@ -119,6 +76,8 @@ export default defineComponent({
       back,
       openAll,
       next,
+
+      setTextComponent,
     };
   },
 });

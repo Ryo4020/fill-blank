@@ -21,8 +21,9 @@ import { Router, useRouter } from "vue-router";
 import CommonButton from "@/components/atoms/CommonButton.vue";
 import TableComponent from "@/components/organisms/Table/index.vue";
 
+import useGroup from '@/composables/use-group';
+
 import { HOME_TABLE_LIST, HOME_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
-import { IgroupData } from "@/mixins/defaultQuestion";
 
 export default defineComponent({
   name: "Home",
@@ -41,13 +42,13 @@ export default defineComponent({
     const userName: ComputedRef<string> = computed(() => store.state.auth.userName); // ユーザー名
 
     store.dispatch("group/setGroupDataList"); // dbからグループリスト取得
-    const groupDataList: ComputedRef<IgroupData[]> = computed(() => store.state.group.groupDataList); // 問題グループリストのデータ
+    const { groupDataList } = useGroup(); // グループのデータリスト
 
     function addGroup(): void {
       // グループの新規追加
       if (isAuthed.value) {
         // 追加するにはログイン必要
-        store.dispatch("modal/setModal", "AddGroupForm");
+        store.dispatch("modal/setModal", "AddGroupForm"); // 追加用のモーダル開く
       } else {
         alert("グループを追加するにはログインが必要です");
         store.dispatch("modal/setModal", "LogInForm");

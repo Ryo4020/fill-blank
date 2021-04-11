@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, ref } from "vue";
+import { computed, ComputedRef, defineComponent } from "vue";
 import { useStore } from "vuex";
 
 import ArrowToHome from "@/components/atoms/ArrowToHome.vue";
@@ -26,8 +26,9 @@ import CommonButton from "@/components/atoms/CommonButton.vue";
 import SearchForm from "@/components/molecules/SearchForm.vue";
 import TableComponent from "@/components/organisms/Table/index.vue";
 
+import useQuestion from "@/composables/use-question";
+
 import { EDIT_TABLE_LIST, EDIT_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
-import { IquestionData } from "@/mixins/defaultQuestion";
 
 export default defineComponent({
   name: "Edit",
@@ -45,28 +46,20 @@ export default defineComponent({
 
     store.dispatch("question/setQuestionDataList"); // 問題リスト設定
 
-    const questionDataList: ComputedRef<IquestionData[]> = computed( // 問題のリストデータ
-      () => store.state.question.questionDataList
-    );
-    const groupName: ComputedRef<string> = computed( // グループネーム
+    const groupName: ComputedRef<string> = computed(
+      // グループネーム
       () => store.getters["group/getGroupName"]
     );
 
-    const searchWord = ref<string>(""); // 検索ワード
-    function search(word: string): void {
-      // 検索ワードを更新
-      searchWord.value = word;
-    }
-    const filteredQuestionList: ComputedRef<IquestionData[]> = computed( // 表示する問題のリストデータ
-      () => questionDataList.value.filter((item) => {
-        const result: number = item.text.indexOf(searchWord.value); // ワードが一致した最初のインデックス
-        return result !== -1;
-      })
-    );
+    const {
+      searchWord, // 検索ワード
+      search, // 検索開始
+      filteredQuestionList, // 表示される問題リスト
+    } = useQuestion();
 
     function addQuestion(): void {
       // 問題の新規追加
-      store.dispatch("modal/setModal", "AddQuestionForm");
+      store.dispatch("modal/setModal", "AddQuestionForm"); // 追加用のモーダル開く
     }
 
     function opeQuestion(dataId: number, operatorKey: string): void {
