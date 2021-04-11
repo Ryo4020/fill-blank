@@ -29,6 +29,9 @@ import { useRoute } from "vue-router";
 import ModalFrame from "@/components/organisms/Modal/ModalFrame.vue";
 import CommonButton from "@/components/atoms/CommonButton.vue";
 
+import useGroup from '@/composables/use-group';
+import useQuestion from "@/composables/use-question";
+
 export default defineComponent({
   name: "ConfirmDelete",
   components: {
@@ -49,12 +52,15 @@ export default defineComponent({
       closeModal();
     }
 
+    const { deleteGroup } = useGroup();
+    const { deleteQuestion } = useQuestion();
+
     function confirm(): void {
       // 削除確定
       if (route.path === "/") { // グループの削除
-        store.dispatch("group/deleteGroup");
+        deleteGroup();
       } else if (route.path === "/edit") { // 問題の削除
-        store.dispatch("question/deleteQuestion");
+        deleteQuestion();
       } else {
         alert("エラーで削除に失敗しました。もう一度選択してください。");
       }

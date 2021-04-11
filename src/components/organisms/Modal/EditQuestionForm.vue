@@ -4,17 +4,22 @@
       <div class="header-label">編集</div>
     </template>
     <template v-slot:content>
-      <div class="content-description">  空白にしたい箇所を｜（全角）で囲んで問題文を入力してください</div>
+      <div class="content-description">
+        空白にしたい箇所を｜（全角）で囲んで問題文を入力してください
+      </div>
       <TextArea v-model="questionText" :row="13" label="ここに問題文を入力" />
     </template>
     <template v-slot:footerLeft>
       <div class="footer-wrapper">
-        <CommonButton label="戻る" @click-event="back" />
+        <CommonButton label="戻る" @click-event="closeModal" />
       </div>
     </template>
     <template v-slot:footerRight>
       <div class="footer-wrapper">
-        <CommonButton label="更新" @click-event="updateQuestion" />
+        <CommonButton
+          label="更新"
+          @click-event="updateQuestion(questionText)"
+        />
       </div>
     </template>
   </ModalFrame>
@@ -27,6 +32,8 @@ import { useStore } from "vuex";
 import ModalFrame from "@/components/organisms/Modal/ModalFrame.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import CommonButton from "@/components/atoms/CommonButton.vue";
+
+import useQuestion from "@/composables/use-question";
 
 export default defineComponent({
   name: "EditQuestionForm",
@@ -42,36 +49,18 @@ export default defineComponent({
       store.getters["question/getQuestionData"].text
     ); // 編集される問題文
 
+    const { updateQuestion } = useQuestion();
+
     function closeModal(): void {
       // モーダル閉じる処理
       store.dispatch("modal/closeModal");
     }
 
-    function back(): void {
-      // キャンセル
-      closeModal();
-    }
-
-    function updateQuestion(): void {
-      // グループを更新
-      const blankTotal: number = Math.floor( // 空白の数
-        questionText.value.split("｜").length / 2
-      );
-      if (blankTotal === 0) {
-        alert("空欄がありません");
-      } else {
-        store.dispatch("question/updateQuestion", {
-          text: questionText.value,
-          total: blankTotal,
-        });
-        closeModal();
-      }
-    }
-
     return {
       questionText,
-      back,
       updateQuestion,
+
+      closeModal,
     };
   },
 });
