@@ -101,7 +101,7 @@ export default defineComponent({
     "..... msg    ....." 30px
     "..... search add  " 36px
     "table table  table" calc(100% - 94px)
-    / minmax(80px, 4fr) minmax(320px, 560px) minmax(80px, 3fr);
+    / minmax(80px, 4fr) minmax(320px, 560px) minmax(92px, 3fr);
   gap: 14px;
   position: relative;
   padding: 24px;
@@ -128,6 +128,7 @@ export default defineComponent({
   .button-wrapper {
     grid-area: add;
     text-align: right;
+    padding-top: 2px; // 上下中央揃え用
   }
 
   .table {
@@ -143,7 +144,7 @@ export default defineComponent({
       "msg   msg    msg  " 30px
       "..... search add  " 36px
       "table table  table" calc(100% - 106px)
-      / 1fr minmax(160px, 320px) 80px;
+      / 1fr minmax(160px, 320px) 92px;
     column-gap: 8px;
   }
 }

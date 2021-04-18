@@ -8,7 +8,7 @@
       @click-row="opeGroup"
     />
     <div class="button-wrapper">
-      <CommonButton label="新規追加" @click-event="addGroup" />
+      <CommonButton label="グループを追加" @click-event="addGroup" />
     </div>
   </div>
 </template>

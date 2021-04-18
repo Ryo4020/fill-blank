@@ -17,7 +17,7 @@
     </div>
     <div class="button-wrapper">
       <CommonButton label="前の問題へ" @click-event="back" />
-      <CommonButton label="すべて解答表示" @click-event="openAll" />
+      <CommonButton label="全解答表示" @click-event="openAll" />
       <CommonButton label="次の問題へ" @click-event="next" />
     </div>
   </div>

@@ -46,7 +46,7 @@ export default defineComponent({
   color: white;
   background: white;
   display: inline;
-  border: 1px solid black;
+  border: 2px solid black;
   margin: 0px 8px;
 }
 
@@ -54,5 +54,6 @@ export default defineComponent({
   color: black !important;
   background: silver !important;
   border: none !important;
+  border-bottom: 2px solid black !important;
 }
 </style>

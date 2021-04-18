@@ -36,6 +36,7 @@ button {
   background: rgb(240, 240, 240);
   border: 2px solid black;
   outline: none;
+  padding: 0px 12px;
   cursor: pointer;
 
   &:hover {

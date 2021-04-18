@@ -45,7 +45,7 @@ input[type="text"] {
   width: 100%;
   height: 36px;
   background: rgb(240, 240, 240);
-  padding: 4px;
+  padding: 4px 12px;
   outline: none;
 }
 </style>
