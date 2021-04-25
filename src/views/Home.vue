@@ -57,7 +57,7 @@ export default defineComponent({
 
     async function startExercise(dataId: number): Promise<void> {
       // 演習開始処理
-      const groupIndex: number = groupDataList.value.findIndex(({ id }) => id === dataId); // 開始するグループのID
+      const groupIndex: number = groupDataList.value.findIndex(({ id }) => id === dataId); // 開始するグループのインデックス
       const totalOfQuestion: number = groupDataList.value[groupIndex].total; // 開始するグループの問題数
       if (totalOfQuestion > 0) { // 問題があるならExerciseへ
         await store.dispatch("question/setQuestionDataList"); // 問題リスト設定

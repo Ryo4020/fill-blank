@@ -101,7 +101,7 @@ export default defineComponent({
     "..... msg    ....." 30px
     "..... search add  " 36px
     "table table  table" calc(100% - 94px)
-    / minmax(80px, 4fr) minmax(320px, 560px) minmax(92px, 3fr);
+    / minmax(80px, 1fr) minmax(320px, 560px) minmax(92px, 1fr);
   gap: 14px;
   position: relative;
   padding: 24px;
