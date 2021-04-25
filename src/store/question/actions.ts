@@ -65,8 +65,9 @@ export const actions: ActionTree<IquestionState, RootState> = {
       });
     });
 
-    const questionData: IquestionData = { id: lastId + 1, ...payload };
-    await groupDocRef.collection('question').add(questionData)
+    // dbに問題ドキュメント追加
+    const newQuestion: IquestionData = { id: lastId + 1, ...payload };
+    await groupDocRef.collection('question').add(newQuestion)
       .then(() => {
         context.dispatch("group/updateTotal", { docRef: groupDocRef, mode: "add" }, { root: true }); // グループの問題数データ加算
       })
@@ -74,7 +75,9 @@ export const actions: ActionTree<IquestionState, RootState> = {
         console.log(error);
       });
 
-    context.dispatch("setQuestionDataList");
+    // vuexを更新
+    const questionData: IquestionData[] = context.state.questionDataList;
+    context.commit("setQuestionData", [...questionData, newQuestion]);
   },
   async deleteQuestion(context): Promise<void> { // 問題削除
     const userUid = context.rootGetters["auth/getUserUid"];
@@ -89,7 +92,10 @@ export const actions: ActionTree<IquestionState, RootState> = {
         });
       });
 
-    context.dispatch("setQuestionDataList");
+    // vuexを更新
+    const questionData: IquestionData[] = context.state.questionDataList;
+    const index = context.state.questionDataList.findIndex(({ id }) => id === context.state.currentQuestionId);
+    context.commit("setQuestionData", questionData.splice(index, 1));
   },
   async updateQuestion(context, payload: { text: string; total: number }): Promise<void> { // 問題分の更新
     // dbのグループドキュメント取得
@@ -105,7 +111,10 @@ export const actions: ActionTree<IquestionState, RootState> = {
         });
       });
 
-    context.dispatch("setQuestionDataList");
+    // vuexを更新
+    const index = context.state.questionDataList.findIndex(({ id }) => id === context.state.currentQuestionId);
+    context.commit("updateText", { text: payload.text, index: index });
+    context.commit("updateTotal", { total: payload.total, index: index });
   },
   error({ commit }, payload: string): void {
     commit("setErrorMessage", payload);

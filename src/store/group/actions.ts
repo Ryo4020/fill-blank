@@ -56,7 +56,10 @@ export const actions: ActionTree<IgroupState, RootState> = {
     // 新グループをdbに追加
     const newGroup: IgroupData = { id: lastId + 1, name: payload, total: 0 };
     await firebase.firestore().collection('users').doc(userUid).collection('group').add(newGroup);
-    context.dispatch("setGroupDataList");
+
+    // vuexを更新
+    const groupData: IgroupData[] = context.state.groupDataList;
+    context.commit("setGroupData", [...groupData, newGroup]);
   },
   async deleteGroup(context): Promise<void> { // グループ削除
     const userUid = context.rootGetters["auth/getUserUid"];
@@ -77,7 +80,11 @@ export const actions: ActionTree<IgroupState, RootState> = {
         });
       });
 
-    context.dispatch("setGroupDataList");
+    // vuexを更新
+    const groupData: IgroupData[] = context.state.groupDataList;
+    const index = groupData.findIndex(({ id }) => id === context.state.currentGroupId);
+    context.commit("setGroupData", groupData.splice(index, 1));
+
     context.dispatch("deleteSubCollection", groupCollectionRef.doc(docId)); // グループ削除後の問題データ削除
   },
   deleteSubCollection(context, payload: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>): void {
