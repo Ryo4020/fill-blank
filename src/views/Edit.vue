@@ -27,6 +27,7 @@ import SearchForm from "@/components/molecules/SearchForm.vue";
 import TableComponent from "@/components/organisms/Table/index.vue";
 
 import useQuestion from "@/composables/use-question";
+import useSearchQuestion from "@/composables/use-search-question";
 
 import { EDIT_TABLE_LIST, EDIT_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
 
@@ -51,11 +52,12 @@ export default defineComponent({
       () => store.getters["group/getGroupName"]
     );
 
+    const { questionDataList } = useQuestion(); // 問題データ
     const {
       searchWord, // 検索ワード
       search, // 検索開始
       filteredQuestionList, // 表示される問題リスト
-    } = useQuestion();
+    } = useSearchQuestion(questionDataList);
 
     function addQuestion(): void {
       // 問題の新規追加
