@@ -27,6 +27,7 @@ import SearchForm from "@/components/molecules/SearchForm.vue";
 import TableComponent from "@/components/organisms/Table/index.vue";
 
 import useQuestion from "@/composables/use-question";
+import useSearchQuestion from "@/composables/use-search-question";
 
 import { EDIT_TABLE_LIST, EDIT_TABLE_OPERATOR_LIST } from "@/mixins/tableLists";
 
@@ -51,11 +52,12 @@ export default defineComponent({
       () => store.getters["group/getGroupName"]
     );
 
+    const { questionDataList } = useQuestion(); // 問題データ
     const {
       searchWord, // 検索ワード
       search, // 検索開始
       filteredQuestionList, // 表示される問題リスト
-    } = useQuestion();
+    } = useSearchQuestion(questionDataList);
 
     function addQuestion(): void {
       // 問題の新規追加
@@ -101,7 +103,7 @@ export default defineComponent({
     "..... msg    ....." 30px
     "..... search add  " 36px
     "table table  table" calc(100% - 94px)
-    / minmax(80px, 4fr) minmax(320px, 560px) minmax(80px, 3fr);
+    / minmax(80px, 1fr) minmax(320px, 560px) minmax(92px, 1fr);
   gap: 14px;
   position: relative;
   padding: 24px;
@@ -128,6 +130,7 @@ export default defineComponent({
   .button-wrapper {
     grid-area: add;
     text-align: right;
+    padding-top: 2px; // 上下中央揃え用
   }
 
   .table {
@@ -143,7 +146,7 @@ export default defineComponent({
       "msg   msg    msg  " 30px
       "..... search add  " 36px
       "table table  table" calc(100% - 106px)
-      / 1fr minmax(160px, 320px) 80px;
+      / 1fr minmax(160px, 320px) 92px;
     column-gap: 8px;
   }
 }

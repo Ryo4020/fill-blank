@@ -1,4 +1,4 @@
-import { computed, ComputedRef, ref } from 'vue';
+import { computed, ComputedRef } from 'vue';
 
 import store from '../store';
 
@@ -7,18 +7,6 @@ import { IquestionData } from '@/mixins/defaultQuestion';
 export default function useQuestion() {
     const questionDataList: ComputedRef<IquestionData[]> = computed( // 問題のリストデータ
         () => store.state.question.questionDataList
-    );
-
-    const searchWord = ref<string>(""); // 検索ワード
-    const search = (word: string) => {
-        // 検索ワードを更新
-        searchWord.value = word;
-    };
-    const filteredQuestionList: ComputedRef<IquestionData[]> = computed( // 表示する問題のリストデータ
-        () => questionDataList.value.filter((item) => {
-            const result: number = item.text.indexOf(searchWord.value); // ワードが一致した最初のインデックス
-            return result !== -1;
-        })
     );
 
     const addQuestion = (questionText: string) => {
@@ -60,12 +48,6 @@ export default function useQuestion() {
     return {
         questionDataList,
 
-        // 検索
-        searchWord,
-        search,
-        filteredQuestionList,
-
-        // 編集
         addQuestion,
         updateQuestion,
         deleteQuestion,
