@@ -1,27 +1,12 @@
 # fill-blank
 
 空欄補充問題自作サイト。ユーザーごとに空欄補充問題をグループに分けて保存し、問題を解いたり、後から編集できます。
-URL先→ [Fill Blank](https://fill-blank.web.app/)
 
-## Project setup
-```
-npm install
-```
+## URL
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+https://fill-blank.web.app/
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## テストユーザー
 
-### Lints and fixes files
-```
-npm run lint
-```
+**E-mail: user@user.com Password: password**　でログインできます。
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
